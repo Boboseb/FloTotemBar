@@ -1,0 +1,219 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+	<Script file="localization.lua"/>
+	<Script file="data.lua"/>
+	<Script file="FloTotemBar.lua"/>
+
+	<Button name="FloSwitchButtonTemplate" inherits="SecureActionButtonTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="12" y="12"/>
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentBackground" file="Interface\Minimap\UI-Minimap-Background">
+					<Size x="11" y="11"/>
+					<Anchors>
+						<Anchor point="CENTER">
+							<Offset x="0" y="0"/>
+						</Anchor>
+					</Anchors>
+					<Color r="1" g="1" b="1" a="0.6"/>
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame name="$parentIcon">
+				<Size x="8" y="8"/>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="0" y="0"/>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture name="$parentTexture"/>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame>
+				<Size x="15" y="15"/>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="0" y="0"/>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<Texture file="Interface\CharacterFrame\TotemBorder"/>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						self:SetFrameLevel(_G[self:GetParent():GetName().."Icon"]:GetFrameLevel() + 1);
+					</OnLoad>
+				</Scripts>
+			</Frame>
+		</Frames>
+		<Attributes>
+			<Attribute name="type" value="multispell" />
+			<Attribute name="alt-spell*" value="0" />
+		</Attributes>
+		<Scripts>
+			<OnLoad>
+				self:RegisterEvent("ACTIONBAR_SLOT_CHANGED");
+			</OnLoad>
+			<OnEvent function="FloSwitchButton_OnUpdate"/>
+			<OnEnter>
+				FloSwitchButton_OnEnter(self:GetParent(), self.callElement);
+			</OnEnter>
+			<OnLeave>
+				FloSwitchButton_OnLeave(self:GetParent(), self.callElement);
+			</OnLeave>
+		</Scripts>
+	</Button>
+
+	<Frame name="FloBarTRAP" inherits="FloBarTemplate">
+		<Size>
+			<AbsDimension x="44" y="44"/>
+		</Size>
+		<Frames>
+			<StatusBar name="$parentCountdown1" inherits="FloCountdown">
+				<Size>
+					<AbsDimension x="6" y="30"/>
+				</Size>
+			</StatusBar>
+			<StatusBar name="$parentCountdown2" inherits="FloCountdown">
+				<Size>
+					<AbsDimension x="6" y="30"/>
+				</Size>
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parentCountdown1" relativePoint="RIGHT">
+						<Offset>
+							<AbsDimension x="2" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</StatusBar>
+			<StatusBar name="$parentCountdown3" inherits="FloCountdown">
+				<Size>
+					<AbsDimension x="6" y="30"/>
+				</Size>
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parentCountdown2" relativePoint="RIGHT">
+						<Offset>
+							<AbsDimension x="2" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</StatusBar>
+			<StatusBar name="$parentCountdown4" inherits="FloCountdown">
+				<Size>
+					<AbsDimension x="6" y="30"/>
+				</Size>
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parentCountdown3" relativePoint="RIGHT">
+						<Offset>
+							<AbsDimension x="2" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</StatusBar>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				FloTotemBar_OnLoad(self);
+			</OnLoad>
+			<OnEvent>
+				FloTotemBar_OnEvent(self, event, ...);
+			</OnEvent>
+			<OnUpdate>
+				FloTotemBar_OnUpdate(self);
+			</OnUpdate>
+		</Scripts>
+	</Frame>
+
+	<Frame name="FloTotemBarTemplate" inherits="FloBarTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="44" y="44"/>
+		</Size>
+		<Frames>
+			<StatusBar name="$parentCountdown" inherits="FloCountdown"/>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				FloTotemBar_OnLoad(self);
+			</OnLoad>
+			<OnEvent>
+				FloTotemBar_OnEvent(self, event, ...);
+			</OnEvent>
+			<OnUpdate>
+				FloTotemBar_OnUpdate(self);
+			</OnUpdate>
+			<OnMouseUp>
+				if self.slot and IsAltKeyDown() then
+					DestroyTotem(self.slot);
+				end
+			</OnMouseUp>
+		</Scripts>
+	</Frame>
+	<Frame name="FloBarEARTH" inherits="FloTotemBarTemplate">
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="UIParent" relativePoint="TOPLEFT">
+				<Offset>
+					<AbsDimension x="0" y="120"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+	</Frame>
+	<Frame name="FloBarFIRE" inherits="FloTotemBarTemplate">
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="FloBarEARTH" relativePoint="TOPRIGHT">
+				<Offset>
+					<AbsDimension x="10" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+	</Frame>
+	<Frame name="FloBarWATER" inherits="FloTotemBarTemplate">
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="FloBarFIRE" relativePoint="TOPRIGHT">
+				<Offset>
+					<AbsDimension x="10" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+	</Frame>
+	<Frame name="FloBarAIR" inherits="FloTotemBarTemplate">
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="FloBarWATER" relativePoint="TOPRIGHT">
+				<Offset>
+					<AbsDimension x="10" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+	</Frame>
+
+	<Frame name="FloBarCALL" inherits="FloBarTemplate">
+		<Size>
+			<AbsDimension x="44" y="44"/>
+		</Size>
+		<Anchors>
+			<Anchor point="TOPRIGHT" relativeTo="FloBarEARTH" relativePoint="TOPLEFT">
+				<Offset>
+					<AbsDimension x="-10" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Scripts>
+			<OnLoad>
+				FloTotemBar_OnLoad(self);
+			</OnLoad>
+			<OnEvent>
+				FloTotemBar_OnEvent(self, event, ...);
+			</OnEvent>
+			<OnUpdate>
+				FloTotemBar_OnUpdate(self);
+			</OnUpdate>
+		</Scripts>
+	</Frame>
+</Ui>
