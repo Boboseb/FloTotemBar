@@ -38,7 +38,10 @@ local FLO_TOTEMIC_CALL_SPELL = GetSpellInfo(TOTEM_MULTI_CAST_RECALL_SPELLS[1]);
 local changingSpec = true;
 
 -- Loads LibButtonFacade and Register the Callback
-local LBF = LibStub ? LibStub('LibButtonFacade', true) : false;
+local LBF = false;
+if LibStub then
+	LBF = LibStub('LibButtonFacade', true);
+end
 
 -------------------------------------------------------------------------------
 -- Functions
