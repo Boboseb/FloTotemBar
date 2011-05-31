@@ -22,7 +22,7 @@ StaticPopupDialogs["FLOLIB_CONFIRM_RESET"] = {
 };
 
 -- Loads LibButtonFacade
-local LBF = LibStub('LibButtonFacade', true);
+local LBF = LibStub ? LibStub('LibButtonFacade', true) : false;
 
 -- Reset addon
 function FloLib_ResetAddon(addonName)
