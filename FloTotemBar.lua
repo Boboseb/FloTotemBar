@@ -37,6 +37,12 @@ local FLO_TOTEMIC_CALL_SPELL = GetSpellInfo(TOTEM_MULTI_CAST_RECALL_SPELLS[1]);
 -- Ugly
 local changingSpec = true;
 
+-- Loads LibButtonFacade and Register the Callback
+local LBF = false;
+if LibStub then
+	LBF = LibStub('LibButtonFacade', true);
+end
+
 -------------------------------------------------------------------------------
 -- Functions
 -------------------------------------------------------------------------------
@@ -132,6 +138,9 @@ function FloTotemBar_OnLoad(self)
 			self:RegisterEvent("PLAYER_TOTEM_UPDATE");
 		end
 	end
+	
+  -- Register the ButtonFacade Callback	
+  if LBF then LBF:RegisterSkinCallback("FloTotemBar", FloTotemBar_OnSkin, self) end;
 end
 
 function FloTotemBar_AddCallButtons(self)
@@ -167,7 +176,12 @@ function FloTotemBar_OnEvent(self, event, arg1, ...)
 		if not changingSpec then
 			FloLib_Setup(self);
 		end
-
+		
+	  -- Loads ButtonFacade Options
+  	if LBF then
+      LBF:Group('FloTotemBar'):Skin(ACTIVE_OPTIONS.buttonFacadeSkin[1]);
+  	end
+  	
 	elseif event == "UNIT_SPELLCAST_SUCCEEDED"  then
 		if arg1 == "player" then
 			FloTotemBar_StartTimer(self, ...);
@@ -917,3 +931,7 @@ function FloSwitchButton_OnLeave(self)
 	self.hover = nil;
 end
 
+-- ButtonFacade Callback
+function FloTotemBar_OnSkin(self, skin, glossAlpha, gloss, group, _, colors)
+  ACTIVE_OPTIONS.buttonFacadeSkin = { [1] = skin, [2] = glossAlpha, [3] = gloss, [4] = colors };
+end
