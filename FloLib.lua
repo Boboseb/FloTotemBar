@@ -1,9 +1,9 @@
 -- Some shared functions
 -- Prevent multi-loading
-if not FLOLIB_VERSION or FLOLIB_VERSION < 1.26 then
+if not FLOLIB_VERSION or FLOLIB_VERSION < 1.27 then
 
 local NUM_SPELL_SLOTS = 10;
-FLOLIB_VERSION = 1.26;
+FLOLIB_VERSION = 1.27;
 
 FLOLIB_ACTIVATE_SPEC_1 = GetSpellInfo(63645);
 FLOLIB_ACTIVATE_SPEC_2 = GetSpellInfo(63644);
