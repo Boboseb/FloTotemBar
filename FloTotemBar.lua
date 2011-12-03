@@ -2,7 +2,7 @@
 -- Constants
 -------------------------------------------------------------------------------
 
-local VERSION = "4.3.21"
+local VERSION = "4.3.22"
 
 -------------------------------------------------------------------------------
 -- Variables
@@ -109,7 +109,7 @@ function FloTotemBar_OnLoad(self)
 		SLASH_FLOTOTEMBAR2 = "/ftb";
 		SlashCmdList["FLOTOTEMBAR"] = FloTotemBar_ReadCmd;
 
-		self:RegisterEvent("VARIABLES_LOADED");
+		self:RegisterEvent("ADDON_LOADED");
 		self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED");
 		self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED");
 
@@ -200,7 +200,7 @@ function FloTotemBar_OnEvent(self, event, arg1, ...)
 	elseif event == "PLAYER_DEAD" then
 		FloTotemBar_ResetTimers(self);
 
-	elseif event == "VARIABLES_LOADED" then
+	elseif event == "ADDON_LOADED" and arg1 == "FloTotemBar" then
 		FloTotemBar_MigrateVars();
 		FloTotemBar_CheckTalentGroup(FLOTOTEMBAR_OPTIONS.active);
 
