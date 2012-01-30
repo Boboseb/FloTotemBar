@@ -26,9 +26,9 @@ StaticPopupDialogs["FLOLIB_CONFIRM_RESET"] = {
 };
 
 -- Loads LibButtonFacade
-local LBF = false;
+local LBF = nil;
 if LibStub then
-	LBF = LibStub('LibButtonFacade', true);
+	LBF = LibStub('Masque', true);
 end
 
 -- Reset addon
@@ -343,12 +343,17 @@ function FloLib_Setup(self)
 			self:Show();
 			self:SetWidth(numSpells * 35 + 12 + timerOffset);
 
+			local group;
+			if LBF then
+				group = LBF:Group('FloTotemBar');
+			end
+
 			for i=1, NUM_SPELL_SLOTS do
 				button = _G[self:GetName().."Button"..i];
 				
 				-- Add the button to ButtonFacade
-				if LBF then
-				  LBF:Group('FloTotemBar'):AddButton(button);
+				if group then
+					group:AddButton(button);
 				end
 
 				if i <= numSpells then
