@@ -1,9 +1,13 @@
+-- This Source Code Form is subject to the terms of the Mozilla Public
+-- License, v. 2.0. If a copy of the MPL was not distributed with this file,
+-- You can obtain one at http://mozilla.org/MPL/2.0/.
+
 -- Some shared functions
 -- Prevent multi-loading
-if not FLOLIB_VERSION or FLOLIB_VERSION < 1.27 then
+if not FLOLIB_VERSION or FLOLIB_VERSION < 1.28 then
 
 local NUM_SPELL_SLOTS = 10;
-FLOLIB_VERSION = 1.27;
+FLOLIB_VERSION = 1.28;
 
 FLOLIB_ACTIVATE_SPEC_1 = GetSpellInfo(63645);
 FLOLIB_ACTIVATE_SPEC_2 = GetSpellInfo(63644);

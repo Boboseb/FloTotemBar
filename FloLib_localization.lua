@@ -1,5 +1,9 @@
+-- This Source Code Form is subject to the terms of the Mozilla Public
+-- License, v. 2.0. If a copy of the MPL was not distributed with this file,
+-- You can obtain one at http://mozilla.org/MPL/2.0/.
+
 -- Prevent multi-loading
-if not FLOLIB_VERSION or FLOLIB_VERSION < 1.26 then
+if not FLOLIB_VERSION or FLOLIB_VERSION < 1.28 then
 
 -------------------------------------------------------------------------------
 -- English localization (Default)
