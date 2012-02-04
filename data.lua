@@ -47,6 +47,14 @@ FLO_TOTEM_SPELLS = {
 			{ id = 3738 },
 			{ id = 98008 }
 		}
+	},
+	["PALADIN"] = {
+		["SEAL"] = {
+			{ id = 20154, school = "" },
+			{ id = 20165, school = "" },
+			{ id = 31801, school = "" },
+			{ id = 20164, school = "" }
+		}
 	}
 };
 FLO_TOTEM_LAYOUTS = {

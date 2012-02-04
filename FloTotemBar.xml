@@ -219,4 +219,15 @@
 			</OnUpdate>
 		</Scripts>
 	</Frame>
+
+	<Frame name="FloBarSEAL" inherits="FloTotemBarTemplate">
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="UIParent" relativePoint="TOPLEFT">
+				<Offset>
+					<AbsDimension x="0" y="120"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+	</Frame>
+
 </Ui>

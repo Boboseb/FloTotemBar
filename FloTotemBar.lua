@@ -26,6 +26,7 @@ local SHOW_WELCOME = true;
 local FLOTOTEMBAR_OPTIONS_DEFAULT = { [1] = { scale = 1, borders = true, barLayout = "1row", barSettings = {} }, active = 1 };
 FLOTOTEMBAR_OPTIONS = FLOTOTEMBAR_OPTIONS_DEFAULT;
 local FLOTOTEMBAR_BARSETTINGS_DEFAULT = {
+	["SEAL"] = { buttonsOrder = {}, position = "auto", color = { 0.49, 0.49, 0, 0.7 }, hiddenSpells = {} },
 	["CALL"] = { buttonsOrder = {}, position = "auto", color = { 0.49, 0, 0.49, 0.7 }, hiddenSpells = {} },
 	["TRAP"] = { buttonsOrder = {}, position = "auto", color = { 0.49, 0.49, 0, 0.7 }, hiddenSpells = {} },
 	["EARTH"] = { buttonsOrder = {}, position = "auto", color = { 0, 0.49, 0, 0.7 }, hiddenSpells = {} },
@@ -130,10 +131,10 @@ function FloTotemBar_OnLoad(self)
 		self:RegisterEvent("PLAYER_DEAD");
 
 		-- Destruction detection
-		if FLO_CLASS_NAME == "HUNTER" then
-			self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED");
-		else
+		if FLO_CLASS_NAME == "SHAMAN" then
 			self:RegisterEvent("PLAYER_TOTEM_UPDATE");
+		else
+			self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED");
 		end
 	end
 end
@@ -419,6 +420,15 @@ function FloTotemBar_UpdateTotem(self, slot)
 	end
 end
 
+function FloTotemBar_UpdateSeal(self, timestamp, spellIdx, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, ...)
+
+	local spell = self.spells[spellIdx];
+	local name = string.upper(spell.name);
+	if event == "SPELL_AURA_REMOVED" and sourceName == UnitName("player") and string.find(string.upper(spellName), name, 1, true) then
+		FloTotemBar_ResetTimer(self, "");
+	end
+end
+
 function FloTotemBar_CheckTrapLife(self, timestamp, spellIdx, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, ...)
 
 	local spell = self.spells[spellIdx];
@@ -520,11 +530,14 @@ function FloTotemBar_SetupSpell(self, spell, pos)
 		end
 	end
 
-	if FLO_CLASS_NAME ~= "HUNTER" then
+	if FLO_CLASS_NAME == "SHAMAN" then
 		algo = FloTotemBar_UpdateTotem;
-	else
+	elseif FLO_CLASS_NAME == "HUNTER" then
 		duration = spell.duration or 60;
 		algo = ALGO_TRAP[spell.school];
+	else
+		duration = spell.duration or 1800;
+		algo = FloTotemBar_UpdateSeal;
 	end
 
 	self.spells[pos] = { id = spell.id, name = spell.name, addName = spell.addName, duration = duration, algo = algo, school = spell.school };
@@ -551,7 +564,7 @@ function FloTotemBar_UpdatePosition(self)
 	local layout = FLO_TOTEM_LAYOUTS[ACTIVE_OPTIONS.barLayout];
 
 	self:ClearAllPoints();
-	if self == FloBarEARTH or self == FloBarTRAP then
+	if self == FloBarEARTH or self == FloBarTRAP or self == FloBarSEAL then
 		local yOffset = -3;
 		local yOffset1 = 0;
 		local yOffset2 = 0;
@@ -581,6 +594,8 @@ function FloTotemBar_UpdatePosition(self)
 
 		if FLO_CLASS_NAME == "HUNTER" then
 			self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 256/ACTIVE_OPTIONS.scale, (yOffset + yOffset2)/ACTIVE_OPTIONS.scale);
+		elseif FLO_CLASS_NAME == "PALADIN" then
+			self:SetPoint("LEFT", ShapeshiftBarFrame, "LEFT", 225, 2);
 		else
 			local finalOffset = layout.offset * self:GetHeight();
 			self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", FloBarCALL:GetWidth() + 18, (yOffset + yOffset1)/ACTIVE_OPTIONS.scale + finalOffset);
