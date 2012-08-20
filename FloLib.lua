@@ -4,10 +4,10 @@
 
 -- Some shared functions
 -- Prevent multi-loading
-if not FLOLIB_VERSION or FLOLIB_VERSION < 1.28 then
+if not FLOLIB_VERSION or FLOLIB_VERSION < 1.29 then
 
 local NUM_SPELL_SLOTS = 10;
-FLOLIB_VERSION = 1.28;
+FLOLIB_VERSION = 1.29;
 
 FLOLIB_ACTIVATE_SPEC_1 = GetSpellInfo(63645);
 FLOLIB_ACTIVATE_SPEC_2 = GetSpellInfo(63644);
@@ -195,26 +195,6 @@ function FloLib_GetTalentRank(talentName, tree)
 	return 0, 0;
 end
 
--- Returns the ID of the last rank of a spell from the spellbook
-function FloLib_GetSpellId(spell)
-
-	local i = 1;
-	local valid = -1;
-	local validRank = nil;
-	local spellName, spellRank = GetSpellBookItemName(i, BOOKTYPE_SPELL)
-	while spellName do
-		if spellName == spell then
-			valid = i;
-			validRank = spellRank;
-		elseif valid > -1 then
-			return valid, validRank;
-		end
-		i = i + 1;
-		spellName, spellRank = GetSpellBookItemName(i, BOOKTYPE_SPELL)
-	end
-	return valid, validRank;
-end
-
 -- Show/hide a spell
 function FloLib_ToggleSpell(self, bar, idx)
 
@@ -239,19 +219,9 @@ function FloLib_Setup(self)
 	local button;
 	local isKnown, spell;
 	local i = 1;
-	local totemIdByName = nil;
 	local id, j, n;
 
 	self.spells = {};
-
-	-- Load totem ids
-	if self.slot then
-		local totemIds = {GetMultiCastTotemSpells(self.slot)};
-		totemIdByName = {};
-		for i, id in ipairs(totemIds) do
-			totemIdByName[GetSpellInfo(id)] = id;
-		end
-	end
 
 	-- Check already positionned spells
 	while self.settings.buttonsOrder[i] do
@@ -265,14 +235,9 @@ function FloLib_Setup(self)
 		end
 
 		if isKnown then
-			if not spell.name then
-				spell.name, spell.addName, spell.texture = GetSpellInfo(spell.id);
-			end
+			spell.name, spell.addName, spell.texture = GetSpellInfo(spell.id);
 			if spell.id2 and not spell.name2 then
 				spell.name2, spell.addName2, spell.texture2 = GetSpellInfo(spell.id2);
-			end
-			if totemIdByName then
-				spell.refId = totemIdByName[spell.name];
 			end
 			self:SetupSpell(spell, i);
 			i = i + 1;
@@ -294,14 +259,9 @@ function FloLib_Setup(self)
 		end
 
 		spell = self.availableSpells[n];
-		if not spell.name then
-			spell.name, spell.addName, spell.texture = GetSpellInfo(spell.id);
-		end
+		spell.name, spell.addName, spell.texture = GetSpellInfo(spell.id);
 		if spell.id2 and not spell.name2 then
 			spell.name2, spell.addName2, spell.texture2 = GetSpellInfo(spell.id2);
-		end
-		if totemIdByName then
-			spell.refId = totemIdByName[spell.name];
 		end
 
 		-- Check if this spell is already positionned
@@ -430,11 +390,7 @@ function FloLib_Button_SetTooltip(self)
 	local spell = self:GetParent().spells[self:GetID()];
 	if spell then
 		--Display the tooltip
-		local spellId, spellRank = FloLib_GetSpellId(spell.name)
-		GameTooltip:SetSpellBookItem(spellId, BOOKTYPE_SPELL);
-		GameTooltipTextRight1:SetText(spellRank);
-		GameTooltipTextRight1:SetTextColor(0.5, 0.5, 0.5);
-		GameTooltipTextRight1:Show();
+		GameTooltip:SetSpellByID(spell.id);
 		GameTooltip:Show();
 	end
 end

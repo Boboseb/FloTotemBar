@@ -93,7 +93,6 @@ function FloTotemBar_OnLoad(self)
 	if FLO_CLASS_NAME == "SHAMAN" then
 		if self.totemtype ~= "CALL" then
 			self.slot = _G[self.totemtype.."_TOTEM_SLOT"];
-			FloTotemBar_AddCallButtons(self);
 		end
 		self.menuHooks.SetLayoutMenu = FloTotemBar_SetLayoutMenu;
 	end
@@ -110,11 +109,6 @@ function FloTotemBar_OnLoad(self)
 		self:RegisterEvent("ADDON_LOADED");
 		self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED");
 		self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED");
-
-		-- Hide default totem bar
-		if FLO_CLASS_NAME == "SHAMAN" then
-			RegisterStateDriver(MultiCastActionBarFrame, "visibility", "hide");
-		end
 	end
 	self:RegisterEvent("PLAYER_ENTERING_WORLD");
 	self:RegisterEvent("LEARNED_SPELL_IN_TAB");
@@ -137,33 +131,6 @@ function FloTotemBar_OnLoad(self)
 		end
 	end
 end
-
-function FloTotemBar_AddCallButtons(self)
-
-	local button, callButton, i;
-	for i = 1, 10 do
-		button = _G[self:GetName().."Button"..i];
-
-		callButton = CreateFrame("Button", "$parentFIRE", button, "FloSwitchButtonTemplate");
-		callButton:SetPoint("BOTTOMLEFT", button, "TOPLEFT", -2, -2);
-		callButton.callElement = "FIRE";
-		callButton:SetAttribute("action", FloSwitchButton_GetActionID(callButton));
-
-		callButton = CreateFrame("Button", "$parentWATER", button, "FloSwitchButtonTemplate");
-		callButton:SetPoint("BOTTOM", button, "TOP", 0, -2);
-		callButton.callElement = "WATER";
-		callButton:SetAttribute("action", FloSwitchButton_GetActionID(callButton));
-
-		callButton = CreateFrame("Button", "$parentAIR", button, "FloSwitchButtonTemplate");
-		callButton:SetPoint("BOTTOMRIGHT", button, "TOPRIGHT", 2, -2);
-		callButton.callElement = "AIR";
-		callButton:SetAttribute("action", FloSwitchButton_GetActionID(callButton));
-
-		button:SetScript("OnEnter", FloTotemBar_OnEnter);
-		button:SetScript("OnLeave", FloTotemBar_OnLeave);
-	end
-end
-
 
 function FloTotemBar_OnEvent(self, event, arg1, ...)
 
@@ -484,40 +451,6 @@ function FloTotemBar_SetupSpell(self, spell, pos)
 		end
 
 		icon:SetTexture(spell.texture);
-
-		button.refId = spell.refId;
-
-		if self.totemtype == "EARTH" or self.totemtype == "FIRE" or self.totemtype == "WATER" or self.totemtype=="AIR" then
-			local button;
-			local callSpells = FLO_TOTEM_SPELLS.SHAMAN.CALL;
-
-			button = _G[name.."Button"..pos.."FIRE"];
-			if IsSpellKnown(callSpells[2].id) then
-				button:Show();
-			else
-				button:Hide();
-			end
-			button:SetAttribute("spell", spell.refId);
-			FloSwitchButton_OnUpdate(button);
-
-			button = _G[name.."Button"..pos.."WATER"];
-			if IsSpellKnown(callSpells[3].id) then
-				button:Show();
-			else
-				button:Hide();
-			end
-			button:SetAttribute("spell", spell.refId);
-			FloSwitchButton_OnUpdate(button);
-
-			button = _G[name.."Button"..pos.."AIR"];
-			if IsSpellKnown(callSpells[4].id) then
-				button:Show();
-			else
-				button:Hide();
-			end
-			button:SetAttribute("spell", spell.refId);
-			FloSwitchButton_OnUpdate(button);
-		end
 	end
 
 	if FLO_CLASS_NAME == "SHAMAN" then
@@ -839,87 +772,11 @@ function FloTotemBar_OnUpdate(self)
 	end
 end
 
-local CALL_PAGE_OFFSETS = { FIRE = 0, WATER = 4, AIR = 8 };
-local CALL_TEX_COORDS = { FIRE = {0, 0.5, 0.5, 1}, WATER = {0.5, 1, 0.5, 1}, AIR = {0, 0.5, 0, 0.5} };
-local CALL_SPELL_ORDER = { FIRE = 2, WATER = 3, AIR = 4 };
-
-function FloSwitchButton_GetActionID(self)
-	return 132 + CALL_PAGE_OFFSETS[self.callElement] + self:GetParent():GetParent().slot;
-end
-
-function FloSwitchButton_OnUpdate(self)
-
-	local action = FloSwitchButton_GetActionID(self);
-	local type, globalID, subType = GetActionInfo(action);
-	local buttonIcon = _G[self:GetName().."IconTexture"];
-
-	if globalID == self:GetParent().refId then
-		buttonIcon:SetTexture("Interface\\AddOns\\FloTotemBar\\images\\calls");
-		buttonIcon:SetTexCoord(unpack(CALL_TEX_COORDS[self.callElement]));
-		self:SetAlpha(1);
-	else
-		buttonIcon:SetTexture(nil);
-		if not self:GetParent().hover then
-			self:SetAlpha(0);
-		end
-	end
-end
-
 function FloTotemBar_OnEnter(self)
 	FloLib_Button_SetTooltip(self);
-	FloSwitchButton_OnEnter(self);
-end
-
-function FloSwitchButton_OnEnter(self, element)
-	local name = self:GetName();
-	_G[name.."FIRE"]:SetAlpha(1);
-	_G[name.."WATER"]:SetAlpha(1);
-	_G[name.."AIR"]:SetAlpha(1);
-	self.hover = true;
-
-	if element then
-		local callName = FLO_TOTEM_SPELLS.SHAMAN.CALL[CALL_SPELL_ORDER[element]].name;
-		local spell = self:GetParent().spells[self:GetID()];
-		GameTooltip:SetOwner(_G[name..element], "ANCHOR_RIGHT");
-		GameTooltip:AddLine(spell.name, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b);
-		GameTooltip:AddLine(string.format(FLO_TOTEM_ADD_CALL_TOOLTIP, callName), GREEN_FONT_COLOR.r, GREEN_FONT_COLOR.g, GREEN_FONT_COLOR.b);
-		GameTooltip:AddLine(string.format(FLO_TOTEM_REMOVE_CALL_TOOLTIP, callName), GREEN_FONT_COLOR.r, GREEN_FONT_COLOR.g, GREEN_FONT_COLOR.b);
-		GameTooltip:Show();
-	end
 end
 
 function FloTotemBar_OnLeave(self)
 	GameTooltip:Hide();
-	FloSwitchButton_OnLeave(self);
-end
-
-function FloSwitchButton_OnLeave(self)
-
-	local buttonIcon;
-	local name = self:GetName();
-
-	GameTooltip:Hide();
-	buttonIcon = _G[self:GetName().."FIREIconTexture"];
-	if buttonIcon:GetTexture() then
-		_G[name.."FIRE"]:SetAlpha(1);
-	else
-		_G[name.."FIRE"]:SetAlpha(0);
-	end
-
-	buttonIcon = _G[self:GetName().."WATERIconTexture"];
-	if buttonIcon:GetTexture() then
-		_G[name.."WATER"]:SetAlpha(1);
-	else
-		_G[name.."WATER"]:SetAlpha(0);
-	end
-
-	buttonIcon = _G[self:GetName().."AIRIconTexture"];
-	if buttonIcon:GetTexture() then
-		_G[name.."AIR"]:SetAlpha(1);
-	else
-		_G[name.."AIR"]:SetAlpha(0);
-	end
-
-	self.hover = nil;
 end
 
