@@ -6,7 +6,7 @@
 -- Constants
 -------------------------------------------------------------------------------
 
-local VERSION = "5.0.25"
+local VERSION = "5.0.26"
 
 -------------------------------------------------------------------------------
 -- Variables
@@ -461,7 +461,7 @@ function FloTotemBar_SetupSpell(self, spell, pos)
 		algo = ALGO_TRAP[spell.school];
 	end
 
-	self.spells[pos] = { id = spell.id, name = spell.name, addName = spell.addName, duration = duration, algo = algo, school = spell.school };
+	self.spells[pos] = { id = spell.id, name = spell.name, addName = spell.addName, duration = duration, algo = algo, school = spell.school, talented = spell.talented };
 
 end
 
@@ -734,7 +734,7 @@ function FloTotemBar_OnUpdate(self)
 	local countdown;
 	local timeleft;
 	local duration;
-	local name;
+	local name, spell;
 	local i, k, v;
 
 	for i=1, #self.spells do

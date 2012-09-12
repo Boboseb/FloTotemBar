@@ -3,7 +3,7 @@
 -- You can obtain one at http://mozilla.org/MPL/2.0/.
 
 -- Prevent multi-loading
-if not FLOLIB_VERSION or FLOLIB_VERSION < 1.30 then
+if not FLOLIB_VERSION or FLOLIB_VERSION < 1.31 then
 
 -------------------------------------------------------------------------------
 -- English localization (Default)

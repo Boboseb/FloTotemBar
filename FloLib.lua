@@ -4,11 +4,11 @@
 
 -- Some shared functions
 -- Prevent multi-loading
-if not FLOLIB_VERSION or FLOLIB_VERSION < 1.30 then
+if not FLOLIB_VERSION or FLOLIB_VERSION < 1.31 then
 
 local _
 local NUM_SPELL_SLOTS = 10;
-FLOLIB_VERSION = 1.30;
+FLOLIB_VERSION = 1.31;
 
 FLOLIB_ACTIVATE_SPEC_1 = GetSpellInfo(63645);
 FLOLIB_ACTIVATE_SPEC_2 = GetSpellInfo(63644);
@@ -340,6 +340,7 @@ function FloLib_UpdateState(self)
 	local numSpells = #self.spells;
 	local spell, cooldown, normalTexture, icon;
 	local start, duration, enable, isUsable, noMana;
+	local start2, duration2, enable2;
 	local i;
 
 	for i=1, numSpells do
@@ -353,6 +354,16 @@ function FloLib_UpdateState(self)
 		--Cooldown stuffs
 		cooldown = _G[self:GetName().."Button"..i.."Cooldown"];
 		start, duration, enable = GetSpellCooldown(spell.id);
+		if spell.talented then
+			start2, duration2, enable2 = GetSpellCooldown(spell.talented);
+			if start >= 0 and start2 >= 0 then
+				start = math.min(start, start2);
+			else
+				start = start + start2;
+			end
+			duration = math.max(duration, duration2);
+		end
+
 		CooldownFrame_SetTimer(cooldown, start, duration, enable);
 
 		--Castable stuffs
