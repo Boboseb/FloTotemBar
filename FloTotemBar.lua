@@ -6,7 +6,7 @@
 -- Constants
 -------------------------------------------------------------------------------
 
-local VERSION = "5.0.27"
+local VERSION = "5.0.28"
 
 -------------------------------------------------------------------------------
 -- Variables
@@ -98,6 +98,9 @@ function FloTotemBar_OnLoad(self)
 		self.menuHooks.SetLayoutMenu = FloTotemBar_SetLayoutMenu;
 	end
 	self:EnableMouse(1);
+	
+	local stateCondition = "nopetbattle,nooverridebar,novehicleui,nopossessbar"
+	RegisterStateDriver(self, "visibility", "["..stateCondition.."] show; hide")
 
 	if SHOW_WELCOME then
 		DEFAULT_CHAT_FRAME:AddMessage( "FloTotemBar "..VERSION.." loaded." );
