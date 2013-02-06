@@ -6,7 +6,7 @@
 -- Constants
 -------------------------------------------------------------------------------
 
-local VERSION = "5.1.28"
+local VERSION = "5.1.29"
 
 -------------------------------------------------------------------------------
 -- Variables
@@ -99,9 +99,6 @@ function FloTotemBar_OnLoad(self)
 	end
 	self:EnableMouse(1);
 	
-	local stateCondition = "nopetbattle,nooverridebar,novehicleui,nopossessbar"
-	RegisterStateDriver(self, "visibility", "["..stateCondition.."] show; hide")
-
 	if SHOW_WELCOME then
 		DEFAULT_CHAT_FRAME:AddMessage( "FloTotemBar "..VERSION.." loaded." );
 		SHOW_WELCOME = nil;
@@ -469,6 +466,13 @@ function FloTotemBar_SetupSpell(self, spell, pos)
 end
 
 function FloTotemBar_OnSetup(self)
+
+	if next(self.spells) == nil then
+		UnregisterStateDriver(self, "visibility")
+	else
+		local stateCondition = "nopetbattle,nooverridebar,novehicleui,nopossessbar"
+		RegisterStateDriver(self, "visibility", "["..stateCondition.."] show; hide")
+	end
 
 	FloTotemBar_ResetTimers(self);
 end
