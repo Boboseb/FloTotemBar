@@ -178,9 +178,8 @@ function FloTotemBar_OnEvent(self, event, arg1, ...)
 
 	elseif event == "UPDATE_BINDINGS" then
 		local totemtype = self.totemtype;
-		if totemtype == "TRAP" then totemtype = "EARTH"
-			FloLib_UpdateBindings(self, "FLOTOTEM"..totemtype);
-		end
+		if totemtype == "TRAP" then totemtype = "EARTH" end
+		FloLib_UpdateBindings(self, "FLOTOTEM"..totemtype);
 
 	elseif event == "ACTIVE_TALENT_GROUP_CHANGED" then
 		if FLOTOTEMBAR_OPTIONS.active ~= arg1 then
