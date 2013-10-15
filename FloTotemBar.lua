@@ -190,7 +190,7 @@ function FloTotemBar_OnEvent(self, event, arg1, ...)
 		-- Events used for totem destruction detection
 		local k, v;
 		for k, v in pairs(SCHOOL_COLORS) do
-			if self["activeSpell"..k] then
+			if arg1 and self["activeSpell"..k] and self.spells[self["activeSpell"..k]] then
 				self.spells[self["activeSpell"..k]].algo(self, arg1, self["activeSpell"..k], ...);
 			end
 		end
