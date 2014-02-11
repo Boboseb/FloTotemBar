@@ -53,7 +53,8 @@ function FloTotemBar_OnLoad(self)
 		[1] = FloTotemBar_CheckTrapLife,
 		[2] = FloTotemBar_CheckTrapLife,
 		[3] = FloTotemBar_CheckTrap2Life,
-		[4] = FloTotemBar_CheckTrapLauncherTime
+		[4] = function() end,
+		[5] = FloTotemBar_CheckTrapLauncherTime
 	};
 	
 	-- Re-anchor the first button, link it to the timer
@@ -61,7 +62,7 @@ function FloTotemBar_OnLoad(self)
 	local button = _G[thisName.."Button1"];
 
 	if thisName == "FloBarTRAP" then
-		button:SetPoint("LEFT", thisName.."Countdown3", "RIGHT", 5, 0);
+		button:SetPoint("LEFT", thisName.."Countdown4", "RIGHT", 5, 0);
 	elseif thisName ~= "FloBarCALL" then
 		button:SetPoint("LEFT", thisName.."Countdown", "RIGHT", 5, 0);
 	end
