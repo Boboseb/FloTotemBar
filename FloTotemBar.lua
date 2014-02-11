@@ -433,14 +433,14 @@ end
 -- Dummy, do nothing here
 function FloTotemBar_CheckTrapLauncherTime(self, timestamp, spellIdx, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, ...)
 
-    local spell = self.spells[spellIdx];
-    local name = string.upper(spell.name);
+	local spell = self.spells[spellIdx];
+	local name = string.upper(spell.name);
 
-    if event == "SPELL_AURA_REMOVED" and string.find(string.upper(spellName), name, 1, true) then
-	if CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_ME) then
-	    FloTotemBar_ResetTimer(self, spell.school);
+	if event == "SPELL_AURA_REMOVED" and string.find(string.upper(spellName), name, 1, true) then
+		if CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_ME) then
+			-- Do something ?
+		end
 	end
-    end
 end
 
 function FloTotemBar_SetupSpell(self, spell, pos)
@@ -734,9 +734,6 @@ function FloTotemBar_StartTimer(self, spellName, rank)
 
 	if founded and school then
 
-		if school ~= 4 then
-			self["startTime4"] = 0;
-		end
 		self["activeSpell"..school] = founded;
 		self["startTime"..school] = startTime;
 
