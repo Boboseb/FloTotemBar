@@ -805,9 +805,9 @@ function FloTotemBar_OnUpdate(self)
 		end
 
 		if isActive then
-			button:SetChecked(1);
+			button:SetChecked(true);
 		else
-			button:SetChecked(0);
+			button:SetChecked(false);
 		end
 	end
 end
