@@ -544,7 +544,11 @@ function FloTotemBar_UpdatePosition(self)
 		end
 
 		if FLO_CLASS_NAME == "HUNTER" then
-			self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 256/ACTIVE_OPTIONS.scale, (yOffset + yOffset2)/ACTIVE_OPTIONS.scale);
+                        if FloAspectBar ~= nil then
+                                self:SetPoint("LEFT", FloAspectBar, "RIGHT", 10/ACTIVE_OPTIONS.scale, 0);
+                        else
+			        self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 512/ACTIVE_OPTIONS.scale, (yOffset + yOffset2)/ACTIVE_OPTIONS.scale);
+                        end
 		elseif FLO_CLASS_NAME == "PALADIN" then
 			self:SetPoint("LEFT", ShapeshiftBarFrame, "LEFT", 225, 2);
 		else
