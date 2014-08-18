@@ -15,32 +15,32 @@ FLO_TOTEM_SPELLS = {
 	},
 	["SHAMAN"] = {
 		["CALL"] = {
-			{ id = 36936 },
-			{ id = 108285 },
-			{ id = 108287 }
+			{ id = 36936 }, -- Totemic Recall
+			{ id = 108285 }, -- Call of the Elements
+			{ id = 108287 } -- Totemic Projection
 		},
 		["EARTH"] = {
-			{ id = 108270 }, -- 15
-			{ id = 2484, talented = 51485 }, -- 26
-			{ id = 8143 }, -- 54
-			{ id = 2062 } -- 58
+			{ id = 108270 }, -- 15 Stone Bulwark
+			{ id = 2484, talented = 51485 }, -- 26 Earthbind / Earthgrab
+			{ id = 8143 }, -- 54 Tremor
+			{ id = 2062 } -- 58 Earth Elemental
 		},
 		["FIRE"] = {
-			{ id = 3599 }, -- 16
-			{ id = 8190 }, -- 36
-			{ id = 2894 } -- 66
+			{ id = 3599 }, -- 16 Searing
+			{ id = 8190 }, -- 36 Magma
+			{ id = 2894 } -- 66 Fire Elemental
 		},
 		["WATER"] = {
-			{ id = 5394 }, -- 30
-			{ id = 16190 }, -- 56
-			{ id = 108280 } -- 75
+			{ id = 5394 }, -- 30 Healing Stream
+			{ id = 108280 }, -- 65 Healing Tide
+			{ id = 157153 } -- 100 Cloudburst
 		},
 		["AIR"] = {
-			{ id = 108273 }, -- 30
-			{ id = 8177 }, -- 38
-			{ id = 108269 }, -- 63
-			{ id = 98008 }, -- 70
-			{ id = 120668 } -- 78
+			{ id = 108273 }, -- 30 Windwalk
+			{ id = 8177 }, -- 38 Grounding
+			{ id = 108269 }, -- 63 Capacitor
+			{ id = 98008 }, -- 70 Spirit Link
+			{ id = 152256 } -- 100 Storm Elemental
 		}
 	}
 };
