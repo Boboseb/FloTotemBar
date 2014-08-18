@@ -549,11 +549,9 @@ function FloTotemBar_UpdatePosition(self)
                         else
 			        self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 512/ACTIVE_OPTIONS.scale, (yOffset + yOffset2)/ACTIVE_OPTIONS.scale);
                         end
-		elseif FLO_CLASS_NAME == "PALADIN" then
-			self:SetPoint("LEFT", ShapeshiftBarFrame, "LEFT", 225, 2);
 		else
 			local finalOffset = layout.offset * self:GetHeight();
-			self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", FloBarCALL:GetWidth() + 18, (yOffset + yOffset1)/ACTIVE_OPTIONS.scale + finalOffset);
+			self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", FloBarCALL:GetWidth() + 464, (yOffset + yOffset1)/ACTIVE_OPTIONS.scale + finalOffset);
 		end
 
 	elseif FLO_CLASS_NAME == "SHAMAN" then
