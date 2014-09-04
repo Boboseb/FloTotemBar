@@ -5,10 +5,9 @@
 FLO_TOTEM_SPELLS = {
 	["HUNTER"] = {
 		["TRAP"] = {
-			{ id = 1499, id2 = 60192, school = 2 },
-			{ id = 13809, id2 = 82941, school = 2 },
-			{ id = 13813, id2 = 82939, school = 1 },
-			{ id = 34600, id2 = 82948, school = 3 },
+			{ id = 1499, school = 2 },
+			{ id = 13809, glyph = 159470, glyphed = 34600, school = 2, glyphedSchool = 3 },
+			{ id = 13813, school = 1 },
 			{ id = 77769, school = 5 },
 			{ id = 1543, duration = 20, school = 4 }
 		}
