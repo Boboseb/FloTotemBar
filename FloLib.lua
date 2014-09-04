@@ -350,7 +350,8 @@ function FloLib_UpdateState(self)
 
 	local numSpells = #self.spells;
 	local spell, cooldown, normalTexture, icon;
-	local start, duration, enable, isUsable, noMana;
+        local locStart, locDuration;
+	local start, duration, enable, charges, maxCharges, isUsable, noMana;
 	local start2, duration2, enable2;
 	local i;
 
@@ -364,7 +365,8 @@ function FloLib_UpdateState(self)
 
 		--Cooldown stuffs
 		cooldown = _G[self:GetName().."Button"..i.."Cooldown"];
-		start, duration, enable = GetSpellCooldown(spell.id);
+		locStart, locDuration = GetSpellLossOfControlCooldown(self.id);
+                start, duration, charges, maxCharges, enable = GetSpellCooldown(spell.id);
                 if spell.glyphed then
                         start, duration, enable = GetSpellCooldown(spell.glyphed);
                 elseif spell.talented then
@@ -377,7 +379,23 @@ function FloLib_UpdateState(self)
 			duration = math.max(duration, duration2);
 		end
 
-		CooldownFrame_SetTimer(cooldown, start, duration, enable);
+	        if (locStart + locDuration) > (start + duration) then
+                        if cooldown.currentCooldownType ~= COOLDOWN_TYPE_LOSS_OF_CONTROL then
+                                cooldown:SetEdgeTexture("Interface\\Cooldown\\edge-LoC");
+                                cooldown:SetSwipeColor(0.17, 0, 0);
+                                cooldown:SetHideCountdownNumbers(true);
+                                cooldown.currentCooldownType = COOLDOWN_TYPE_LOSS_OF_CONTROL;
+                        end
+                        CooldownFrame_SetTimer(cooldown, locStart, locDuration, 1, nil, nil, true);
+                else
+                        if cooldown.currentCooldownType ~= COOLDOWN_TYPE_NORMAL then
+                                cooldown:SetEdgeTexture("Interface\\Cooldown\\edge");
+                                cooldown:SetSwipeColor(0, 0, 0);
+                                cooldown:SetHideCountdownNumbers(false);
+                                cooldown.currentCooldownType = COOLDOWN_TYPE_NORMAL;
+                        end
+                        CooldownFrame_SetTimer(cooldown, start, duration, enable, charges, maxCharges);
+                end
 
 		--Castable stuffs
 		normalTexture = _G[self:GetName().."Button"..i.."NormalTexture"];
