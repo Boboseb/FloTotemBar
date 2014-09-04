@@ -417,7 +417,7 @@ function FloTotemBar_CheckTrapLife(self, timestamp, spellIdx, event, hideCaster,
 	local spell = self.spells[spellIdx];
 	local name = string.upper(spell.name);
 
-	if strsub(event, 1, 5) == "SPELL" and event ~= "SPELL_CAST_SUCCESS" and event ~= "SPELL_CREATE" and string.find(string.upper(spellName), name, 1, true) then
+	if event ~= nil and strsub(event, 1, 5) == "SPELL" and event ~= "SPELL_CAST_SUCCESS" and event ~= "SPELL_CREATE" and string.find(string.upper(spellName), name, 1, true) then
 		if CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MINE) then
 			FloTotemBar_ResetTimer(self, spell.school);
 		else
@@ -437,7 +437,7 @@ function FloTotemBar_CheckTrap2Life(self, timestamp, spellIdx, event, hideCaster
 		COMBATLOG_OBJECT_TYPE_GUARDIAN
 		);
 
-	if strsub(event, 1, 5) == "SWING" and CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MY_GUARDIAN) then
+	if event ~= nil and strsub(event, 1, 5) == "SWING" and CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MY_GUARDIAN) then
 		FloTotemBar_ResetTimer(self, spell.school);
 	end
 end
