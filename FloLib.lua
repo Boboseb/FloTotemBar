@@ -4,11 +4,11 @@
 
 -- Some shared functions
 -- Prevent multi-loading
-if not FLOLIB_VERSION or FLOLIB_VERSION < 1.33 then
+if not FLOLIB_VERSION or FLOLIB_VERSION < 1.34 then
 
 local _
 local NUM_SPELL_SLOTS = 10;
-FLOLIB_VERSION = 1.33;
+FLOLIB_VERSION = 1.34;
 
 FLOLIB_ACTIVATE_SPEC_1 = GetSpellInfo(63645);
 FLOLIB_ACTIVATE_SPEC_2 = GetSpellInfo(63644);
@@ -364,7 +364,7 @@ function FloLib_UpdateState(self)
 
 		--Cooldown stuffs
 		cooldown = _G[self:GetName().."Button"..i.."Cooldown"];
-                start, duration, charges, maxCharges, enable = GetSpellCooldown(spell.id);
+                start, duration, enable, charges, maxCharges = GetSpellCooldown(spell.id);
                 if spell.glyphed then
                         start, duration, enable = GetSpellCooldown(spell.glyphed);
                 elseif spell.talented then
