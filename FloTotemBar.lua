@@ -186,7 +186,7 @@ function FloTotemBar_OnEvent(self, event, arg1, ...)
 
 		-- Hook the UIParent_ManageFramePositions function
 		hooksecurefunc("UIParent_ManageFramePositions", FloTotemBar_UpdatePositions);
-		hooksecurefunc("SetActiveSpecGroup", function() changingSpec = true; end);
+		hooksecurefunc("SetSpecialization", function() changingSpec = true; end);
 
 	elseif event == "UPDATE_BINDINGS" then
 		local totemtype = self.totemtype;
