@@ -4,14 +4,13 @@
 
 -- Some shared functions
 -- Prevent multi-loading
-if not FLOLIB_VERSION or FLOLIB_VERSION < 1.34 then
+if not FLOLIB_VERSION or FLOLIB_VERSION < 1.35 then
 
 local _
 local NUM_SPELL_SLOTS = 10;
-FLOLIB_VERSION = 1.34;
+FLOLIB_VERSION = 1.35;
 
-FLOLIB_ACTIVATE_SPEC_1 = GetSpellInfo(63645);
-FLOLIB_ACTIVATE_SPEC_2 = GetSpellInfo(63644);
+FLOLIB_ACTIVATE_SPEC = GetSpellInfo(200749);
 
 StaticPopupDialogs["FLOLIB_CONFIRM_RESET"] = {
 	text = FLOLIB_CONFIRM_RESET,
@@ -383,7 +382,7 @@ function FloLib_UpdateState(self)
                         cooldown:SetHideCountdownNumbers(false);
                         cooldown.currentCooldownType = COOLDOWN_TYPE_NORMAL;
                 end
-                CooldownFrame_SetTimer(cooldown, start, duration, enable, charges, maxCharges);
+                CooldownFrame_Set(cooldown, start, duration, enable, charges, maxCharges);
 
 		--Castable stuffs
 		normalTexture = _G[self:GetName().."Button"..i.."NormalTexture"];
