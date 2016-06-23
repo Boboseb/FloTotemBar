@@ -54,8 +54,7 @@ function FloTotemBar_OnLoad(self)
 		[1] = FloTotemBar_CheckTrapLife,
 		[2] = FloTotemBar_CheckTrapLife,
 		[3] = FloTotemBar_CheckTrap2Life,
-		[4] = function() end,
-		[5] = FloTotemBar_CheckTrapLauncherTime
+		[4] = function() end
 	};
 	
 	-- Re-anchor the first button, link it to the timer
@@ -110,11 +109,13 @@ function FloTotemBar_OnLoad(self)
 		SlashCmdList["FLOTOTEMBAR"] = FloTotemBar_ReadCmd;
 
 		self:RegisterEvent("ADDON_LOADED");
-		self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED");
+		self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED");
 		self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED");
 	end
 	self:RegisterEvent("PLAYER_ENTERING_WORLD");
 	self:RegisterEvent("LEARNED_SPELL_IN_TAB");
+	self:RegisterEvent("PLAYER_TALENT_UPDATE");
+	self:RegisterEvent("PLAYER_PVP_TALENT_UPDATE");
 	self:RegisterEvent("CHARACTER_POINTS_CHANGED");
 	self:RegisterEvent("PLAYER_ALIVE");
 	self:RegisterEvent("PLAYER_LEVEL_UP");
@@ -133,33 +134,15 @@ function FloTotemBar_OnLoad(self)
 			self:RegisterEvent("PLAYER_TOTEM_UPDATE");
 		else
 			self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED");
-			self:RegisterUnitEvent("UNIT_AURA", "player");
 		end
 	end
 end
 
 function FloTotemBar_OnEvent(self, event, arg1, ...)
 
-	if event == "PLAYER_ENTERING_WORLD" or event == "LEARNED_SPELL_IN_TAB" or event == "PLAYER_ALIVE" or event == "PLAYER_LEVEL_UP" or event == "CHARACTER_POINTS_CHANGED" or event == "GLYPH_ADDED" or event == "GLYPH_REMOVED" then
+	if event == "PLAYER_ENTERING_WORLD" or event == "LEARNED_SPELL_IN_TAB" or event == "PLAYER_ALIVE" or event == "PLAYER_LEVEL_UP" or event == "CHARACTER_POINTS_CHANGED" or event == "GLYPH_ADDED" or event == "GLYPH_REMOVED" or event == "PLAYER_TALENT_UPDATE" or event == "PLAYER_PVP_TALENT_UPDATE" then
 		if not changingSpec then
 			FloLib_Setup(self);
-
-			if FLO_CLASS_NAME == "HUNTER" then
-				-- check trap launcher
-				local name = GetSpellInfo(77769);
-				local buff = UnitBuff("player", name);
-				if buff ~= nil then
-					FloTotemBar_StartTimer(self, name);
-				end
-			end
-		end
-
-	elseif event == "UNIT_AURA" then
-		-- check trap launcher
-		local name = GetSpellInfo(77769);
-		local buff = UnitBuff("player", name);
-		if buff ~= nil then
-			FloTotemBar_StartTimer(self, name);
 		end
 
 	elseif event == "UNIT_SPELLCAST_SUCCEEDED" then
@@ -193,9 +176,10 @@ function FloTotemBar_OnEvent(self, event, arg1, ...)
 		if totemtype == "TRAP" then totemtype = "EARTH" end
 		FloLib_UpdateBindings(self, "FLOTOTEM"..totemtype);
 
-	elseif event == "ACTIVE_TALENT_GROUP_CHANGED" then
-		if FLOTOTEMBAR_OPTIONS.active ~= arg1 then
-			FloTotemBar_TalentGroupChanged(arg1);
+	elseif event == "PLAYER_SPECIALIZATION_CHANGED" then
+                local spec = GetSpecialization();
+		if arg1 == "player" and FLOTOTEMBAR_OPTIONS.active ~= spec then
+			FloTotemBar_TalentGroupChanged(spec);
 		end
 
 	else
@@ -439,19 +423,6 @@ function FloTotemBar_CheckTrap2Life(self, timestamp, spellIdx, event, hideCaster
 
 	if event ~= nil and strsub(event, 1, 5) == "SWING" and CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MY_GUARDIAN) then
 		FloTotemBar_ResetTimer(self, spell.school);
-	end
-end
-
--- Dummy, do nothing here
-function FloTotemBar_CheckTrapLauncherTime(self, timestamp, spellIdx, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, ...)
-
-	local spell = self.spells[spellIdx];
-	local name = string.upper(spell.name);
-
-	if event == "SPELL_AURA_REMOVED" and string.find(string.upper(spellName), name, 1, true) then
-		if CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_ME) then
-			FloTotemBar_ResetTimer(self, spell.school);
-		end
 	end
 end
 
