@@ -13,32 +13,27 @@ FLO_TOTEM_SPELLS = {
 	},
 	["SHAMAN"] = {
 		["CALL"] = {
-			{ id = 36936 }, -- Totemic Recall
-			{ id = 108285 }, -- Call of the Elements
-			{ id = 108287 } -- Totemic Projection
 		},
 		["EARTH"] = {
-			{ id = 108270 }, -- 15 Stone Bulwark
-			{ id = 2484, talented = 51485 }, -- 26 Earthbind / Earthgrab
-			{ id = 8143 }, -- 54 Tremor
-			{ id = 2062 } -- 58 Earth Elemental
+			{ id = 5394 }, -- 13 Healing Stream Totem
+			{ id = 210643 }, -- 15 Totem Mastery
+			{ id = 192077 }, -- 30 Wind Rush Totem
+			{ id = 51485 }, -- 45 Earthgrab Totem
+			{ id = 192058 }, -- 45 Lightning Surge Totem
+			{ id = 196932 }, -- 45 Voodoo Totem
+			{ id = 61882 }, -- 52 Earthquake Totem
+			{ id = 108280 }, -- 54 Healing Tide Totem
+			{ id = 98008 }, -- 62 Spirit Link Totem
+			{ id = 207399 }, -- 75 Ancestral Protection Totem
+			{ id = 198838 }, -- 75 Earthen Shield Totem
+			{ id = 157153 }, -- 90 Cloudburst Totem
+			{ id = 192222 }, -- 100 Liquid Magma Totem
 		},
 		["FIRE"] = {
-			{ id = 3599 }, -- 16 Searing
-			{ id = 8190 }, -- 36 Magma
-			{ id = 2894 } -- 66 Fire Elemental
 		},
 		["WATER"] = {
-			{ id = 5394 }, -- 30 Healing Stream
-			{ id = 108280 }, -- 65 Healing Tide
-			{ id = 157153 } -- 100 Cloudburst
 		},
 		["AIR"] = {
-			{ id = 108273 }, -- 30 Windwalk
-			{ id = 8177 }, -- 38 Grounding
-			{ id = 108269 }, -- 63 Capacitor
-			{ id = 98008 }, -- 70 Spirit Link
-			{ id = 152256 } -- 100 Storm Elemental
 		}
 	}
 };
