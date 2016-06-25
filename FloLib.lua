@@ -242,7 +242,7 @@ function FloLib_Setup(self)
 		isKnown = false;
 		if not self.settings.hiddenSpells[n] then
 			spell = self.availableSpells[n];
-			isKnown = spell and IsSpellKnown(spell.id);
+			isKnown = spell and GetSpellInfo(GetSpellInfo(spell.id)) ~= nil;
 		end
 
 		if isKnown then
@@ -265,7 +265,7 @@ function FloLib_Setup(self)
 
 	for n = 1, #self.availableSpells do
 
-		if n > NUM_SPELL_SLOTS then
+		if numSpells > NUM_SPELL_SLOTS then
 			break;
 		end
 
@@ -287,7 +287,7 @@ function FloLib_Setup(self)
 		if not i then
 			isKnown = false;
 			if not self.settings.hiddenSpells[n] then
-				isKnown = IsSpellKnown(spell.id);
+				isKnown = GetSpellInfo(GetSpellInfo(spell.id)) ~= nil;
 			end
 			if isKnown then
 
