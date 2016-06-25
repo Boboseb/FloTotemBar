@@ -152,7 +152,7 @@ function FloTotemBar_OnEvent(self, event, arg1, ...)
 
 	elseif event == "UNIT_SPELLCAST_INTERRUPTED" then
 		local spellName = ...;
-		if arg1 == "player" and (spellName == FLOLIB_ACTIVATE_SPEC_1 or spellName == FLOLIB_ACTIVATE_SPEC_2) then
+		if arg1 == "player" and spellName == FLOLIB_ACTIVATE_SPEC then
 			changingSpec = false;
 		end
 
