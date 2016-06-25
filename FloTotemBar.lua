@@ -690,7 +690,7 @@ function FloTotemBar_TimerRed(self, school)
 
 end
 
-function FloTotemBar_StartTimer(self, spellName, rank)
+function FloTotemBar_StartTimer(self, spellName, rank, guid, spellid)
 
 	local founded = false;
 	local haveTotem, name, startTime, duration, icon;
@@ -706,7 +706,7 @@ function FloTotemBar_StartTimer(self, spellName, rank)
 
 	-- Find spell
 	for i = 1, #self.spells do
-		if string.lower(self.spells[i].name) == string.lower(spellName) then
+		if self.spells[i].id == spellid or self.spells[i].talented == spellid then
 			founded = i;
 
 			if FLO_CLASS_NAME == "SHAMAN" then
