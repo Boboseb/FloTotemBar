@@ -501,7 +501,14 @@ function FloTotemBar_UpdatePosition(self)
 			yOffset = 110-UIParent:GetHeight();
 		else
 			anchorFrame = MainMenuBar;
-			if ReputationWatchBar:IsShown() and MainMenuExpBar:IsShown() then
+
+                        local numWatchBars = 0;
+		        numWatchBars = numWatchBars + (ReputationWatchBar:IsShown() and 1 or 0);
+		        numWatchBars = numWatchBars + (HonorWatchBar:IsShown() and 1 or 0);
+		        numWatchBars = numWatchBars + (ArtifactWatchBar:IsShown() and 1 or 0);
+                        numWatchBars = numWatchBars + (MainMenuExpBar:IsShown() and 1 or 0);
+
+			if numWatchBars > 1 then
 				yOffset = yOffset + 9;
 			end
 
