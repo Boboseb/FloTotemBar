@@ -38,8 +38,6 @@ local FLOTOTEMBAR_BARSETTINGS_DEFAULT = {
 FLO_CLASS_NAME = nil;
 local ACTIVE_OPTIONS = FLOTOTEMBAR_OPTIONS[1];
 
-local FLO_TOTEMIC_CALL_SPELL = GetSpellInfo(TOTEM_MULTI_CAST_RECALL_SPELLS[1]);
-
 -- Ugly
 local changingSpec = true;
 
@@ -697,12 +695,6 @@ function FloTotemBar_StartTimer(self, spellName, rank, guid, spellid)
 	local countdown;
 	local school;
 	local i;
-
-	-- Special case for Totemic Call
-	if spellName == FLO_TOTEMIC_CALL_SPELL then
-		FloTotemBar_ResetTimer(self, "");
-		return;
-	end
 
 	-- Find spell
 	for i = 1, #self.spells do
