@@ -25,15 +25,11 @@ local SCHOOL_COLORS = {
 local ALGO_TRAP;
 
 local SHOW_WELCOME = true;
-local FLOTOTEMBAR_OPTIONS_DEFAULT = { [1] = { scale = 1, borders = true, barLayout = "1row", barSettings = {} }, active = 1 };
+local FLOTOTEMBAR_OPTIONS_DEFAULT = { [1] = { scale = 1, borders = true, barSettings = {} }, active = 1 };
 FLOTOTEMBAR_OPTIONS = FLOTOTEMBAR_OPTIONS_DEFAULT;
 local FLOTOTEMBAR_BARSETTINGS_DEFAULT = {
-	["CALL"] = { buttonsOrder = {}, position = "auto", color = { 0.49, 0, 0.49, 0.7 }, hiddenSpells = {} },
 	["TRAP"] = { buttonsOrder = {}, position = "auto", color = { 0.49, 0.49, 0, 0.7 }, hiddenSpells = {} },
-	["EARTH"] = { buttonsOrder = {}, position = "auto", color = { 0, 0.49, 0, 0.7 }, hiddenSpells = {} },
-	["FIRE"] = { buttonsOrder = {}, position = "auto", color = { 0.49, 0, 0, 0.7 }, hiddenSpells = {} },
-	["WATER"] = { buttonsOrder = {}, position = "auto", color = { 0, 0.49, 0.49, 0.7 }, hiddenSpells = {} },
-	["AIR"] = { buttonsOrder = {}, position = "auto", color = { 0, 0, 0.99, 0.7 }, hiddenSpells = {} },
+	["EARTH"] = { buttonsOrder = {}, position = "auto", color = { 0.49, 0, 0.49, 0.7 }, hiddenSpells = {} },
 };
 FLO_CLASS_NAME = nil;
 local ACTIVE_OPTIONS = FLOTOTEMBAR_OPTIONS[1];
@@ -94,7 +90,6 @@ function FloTotemBar_OnLoad(self)
 		if self.totemtype ~= "CALL" then
 			self.slot = _G[self.totemtype.."_TOTEM_SLOT"];
 		end
-		self.menuHooks.SetLayoutMenu = FloTotemBar_SetLayoutMenu;
 	end
 	self:EnableMouse(1);
 	
@@ -162,7 +157,8 @@ function FloTotemBar_OnEvent(self, event, arg1, ...)
 		FloTotemBar_ResetTimers(self);
 
 	elseif event == "ADDON_LOADED" and arg1 == "FloTotemBar" then
-		FloTotemBar_MigrateVars();
+
+
 		FloTotemBar_CheckTalentGroup(FLOTOTEMBAR_OPTIONS.active);
 
 		-- Hook the UIParent_ManageFramePositions function
@@ -246,19 +242,23 @@ function FloTotemBar_TalentGroupChanged(grp)
 	for k, v in pairs(ACTIVE_OPTIONS.barSettings) do
 		if v.position ~= "auto" then
 			local bar = _G["FloBar"..k];
-			v.refPoint = { bar:GetPoint() };
+                        if bar ~= nil then
+			        v.refPoint = { bar:GetPoint() };
+                        end
 		end
 	end
 
 	FloTotemBar_CheckTalentGroup(grp);
 	for k, v in pairs(ACTIVE_OPTIONS.barSettings) do
 		local bar = _G["FloBar"..k];
-		FloLib_Setup(bar);
-		-- Restore position
-		if v.position ~= "auto" and v.refPoint then
-			bar:ClearAllPoints();
-			bar:SetPoint(unpack(v.refPoint));
-		end
+                if bar ~= nil then
+		        FloLib_Setup(bar);
+		        -- Restore position
+		        if v.position ~= "auto" and v.refPoint then
+			        bar:ClearAllPoints();
+			        bar:SetPoint(unpack(v.refPoint));
+		        end
+                end
 	end
 end
 
@@ -278,67 +278,16 @@ function FloTotemBar_CheckTalentGroup(grp)
 	end
 	for k, v in pairs(ACTIVE_OPTIONS.barSettings) do
 		local bar = _G["FloBar"..k];
-		bar.globalSettings = ACTIVE_OPTIONS;
-		bar.settings = v;
-		FloTotemBar_SetPosition(nil, bar, v.position);
+                if bar ~= nil then
+		        bar.globalSettings = ACTIVE_OPTIONS;
+		        bar.settings = v;
+		        FloTotemBar_SetPosition(nil, bar, v.position);
+                else
+                        ACTIVE_OPTIONS.barSettings[k] = nil;
+                end
 	end
 	FloTotemBar_SetScale(ACTIVE_OPTIONS.scale);
 	FloTotemBar_SetBorders(nil, ACTIVE_OPTIONS.borders);
-
-end
-
-function FloTotemBar_MigrateVars()
-
-	local k, v;
-	-- Check new dual spec vars
-	if not FLOTOTEMBAR_OPTIONS[1] then
-		local tmp = FLOTOTEMBAR_OPTIONS;
-		FLOTOTEMBAR_OPTIONS = { [1] = tmp };
-	end
-
-	-- Copy new variables
-	FloLib_CopyPreserve(FLOTOTEMBAR_OPTIONS_DEFAULT, FLOTOTEMBAR_OPTIONS);
-	if FLOTOTEMBAR_OPTIONS[2] then
-		FloLib_CopyPreserve(FLOTOTEMBAR_OPTIONS_DEFAULT[1], FLOTOTEMBAR_OPTIONS[2]);
-	end
-
-	ACTIVE_OPTIONS = FLOTOTEMBAR_OPTIONS[1];
-
-	-- Import old variables
-	if FLOTOTEMBAR_LAYOUT then
-		for k, v in pairs(ACTIVE_OPTIONS.barSettings) do
-			v.position = FLOTOTEMBAR_LAYOUT;
-		end
-	elseif ACTIVE_OPTIONS.layout then
-		for k, v in pairs(ACTIVE_OPTIONS.buttonsOrder) do
-			if k ~= "TRAP" then
-				ACTIVE_OPTIONS.barSettings[k] = FLOTOTEMBAR_BARSETTINGS_DEFAULT[k];
-				ACTIVE_OPTIONS.barSettings[k].position = ACTIVE_OPTIONS.layout;
-			end
-		end
-		ACTIVE_OPTIONS.layout = nil;
-	end
-	if FLOTOTEMBAR_SCALE then
-		ACTIVE_OPTIONS.scale = FLOTOTEMBAR_SCALE;
-	end
-	if FLOTOTEMBAR_BUTTONS_ORDER then
-		for k, v in pairs(FLOTOTEMBAR_BUTTONS_ORDER) do
-			if k ~= "TRAP" then
-				ACTIVE_OPTIONS.barSettings[k].buttonsOrder = v;
-			end
-		end
-	elseif ACTIVE_OPTIONS.buttonsOrder then
-		for k, v in pairs(ACTIVE_OPTIONS.buttonsOrder) do
-			if k ~= "TRAP" then
-				ACTIVE_OPTIONS.barSettings[k].buttonsOrder = v;
-			end
-		end
-		ACTIVE_OPTIONS.buttonsOrder = nil;
-	end
-
-	for k, v in pairs(ACTIVE_OPTIONS.barSettings) do
-		FloLib_CopyPreserve(FLOTOTEMBAR_BARSETTINGS_DEFAULT[k], v);
-	end
 
 end
 
@@ -478,7 +427,7 @@ end
 function FloTotemBar_UpdatePosition(self)
 
 	-- Avoid tainting when in combat
-	if InCombatLockdown() then
+	if InCombatLockdown() or self == nil then
 		return;
 	end
 
@@ -486,8 +435,6 @@ function FloTotemBar_UpdatePosition(self)
 	if not self.settings or self.settings.position ~= "auto" then
 		return;
 	end
-
-	local layout = FLO_TOTEM_LAYOUTS[ACTIVE_OPTIONS.barLayout];
 
 	self:ClearAllPoints();
 	if self == FloBarEARTH or self == FloBarTRAP then
@@ -532,13 +479,9 @@ function FloTotemBar_UpdatePosition(self)
 			        self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 512/ACTIVE_OPTIONS.scale, (yOffset + yOffset2)/ACTIVE_OPTIONS.scale);
                         end
 		else
-			local finalOffset = layout.offset * self:GetHeight();
-			self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", FloBarCALL:GetWidth() + 464, (yOffset + yOffset1)/ACTIVE_OPTIONS.scale + finalOffset);
+			self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 464, (yOffset + yOffset1)/ACTIVE_OPTIONS.scale);
 		end
 
-	elseif FLO_CLASS_NAME == "SHAMAN" then
-
-		self:SetPoint(unpack(layout[self:GetName()]));
 	end
 end
 
@@ -616,35 +559,6 @@ function FloTotemBar_SetPosition(self, bar, mode)
 			end
 		end
 	end
-end
-
-function FloTotemBar_SetLayoutMenu()
-
-	local i;
-	-- Add the possible values to the menu
-	for i = 1, #FLO_TOTEM_LAYOUTS_ORDER do
-		local value = FLO_TOTEM_LAYOUTS_ORDER[i];
-		local info = UIDropDownMenu_CreateInfo();
-		info.text = FLO_TOTEM_LAYOUTS[value].label;
-		info.value = value;
-		info.func = FloTotemBar_SetLayout;
-		info.arg1 = value;
-
-		if value == ACTIVE_OPTIONS.barLayout then
-			info.checked = 1;
-		end
-		UIDropDownMenu_AddButton(info, UIDROPDOWNMENU_MENU_LEVEL);
-	end
-
-end
-
-function FloTotemBar_SetLayout(self, layout)
-
-	-- Close all dropdowns
-	CloseDropDownMenus();
-
-	ACTIVE_OPTIONS.barLayout = layout;
-	FloTotemBar_UpdatePositions();
 end
 
 function FloTotemBar_SetScale(scale)

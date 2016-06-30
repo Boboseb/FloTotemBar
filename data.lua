@@ -12,8 +12,6 @@ FLO_TOTEM_SPELLS = {
 		}
 	},
 	["SHAMAN"] = {
-		["CALL"] = {
-		},
 		["EARTH"] = {
 			{ id = 5394 }, -- 13 Healing Stream Totem
 			{ id = 210643 }, -- 15 Totem Mastery
@@ -28,51 +26,7 @@ FLO_TOTEM_SPELLS = {
 			{ id = 198838 }, -- 75 Earthen Shield Totem
 			{ id = 157153 }, -- 90 Cloudburst Totem
 			{ id = 192222 }, -- 100 Liquid Magma Totem
-		},
-		["FIRE"] = {
-		},
-		["WATER"] = {
-		},
-		["AIR"] = {
 		}
 	}
 };
-FLO_TOTEM_LAYOUTS = {
-	["1row"] = { label = FLO_TOTEM_1ROW, offset = 0,
-		["FloBarFIRE"] = { "LEFT", "FloBarEARTH", "RIGHT", 3, 0 },
-		["FloBarWATER"] = { "LEFT", "FloBarFIRE", "RIGHT", 3, 0 },
-		["FloBarAIR"] = { "LEFT", "FloBarWATER", "RIGHT", 3, 0 },
-		["FloBarCALL"] = { "RIGHT", "FloBarEARTH", "LEFT", -3, 0 },
-	},
-	["2rows"] = { label = FLO_TOTEM_2ROWS, offset = 1,
-		["FloBarFIRE"] = { "LEFT", "FloBarEARTH", "RIGHT", 3, 0 },
-		["FloBarWATER"] = { "TOPLEFT", "FloBarEARTH", "BOTTOMLEFT", 0, 0 },
-		["FloBarAIR"] = { "LEFT", "FloBarWATER", "RIGHT", 3, 0 },
-		["FloBarCALL"] = { "RIGHT", "FloBarEARTH", "LEFT", -3, 0 },
-	},
-	["4rows"] = { label = FLO_TOTEM_4ROWS, offset = 3,
-		["FloBarFIRE"] = { "TOPLEFT", "FloBarEARTH", "BOTTOMLEFT", 0, 0 },
-		["FloBarWATER"] = { "TOPLEFT", "FloBarFIRE", "BOTTOMLEFT", 0, 0 },
-		["FloBarAIR"] = { "TOPLEFT", "FloBarWATER", "BOTTOMLEFT", 0, 0 },
-		["FloBarCALL"] = { "RIGHT", "FloBarEARTH", "LEFT", -3, 0 },
-	},
-	["2rows-reverse"] = { label = FLO_TOTEM_2ROWS_REVERSE, offset = 0,
-		["FloBarFIRE"] = { "LEFT", "FloBarEARTH", "RIGHT", 3, 0 },
-		["FloBarWATER"] = { "BOTTOMLEFT", "FloBarEARTH", "TOPLEFT", 0, 0 },
-		["FloBarAIR"] = { "LEFT", "FloBarWATER", "RIGHT", 3, 0 },
-		["FloBarCALL"] = { "RIGHT", "FloBarEARTH", "LEFT", -3, 0 },
-	},
-	["4rows-reverse"] = { label = FLO_TOTEM_4ROWS_REVERSE, offset = 0,
-		["FloBarFIRE"] = { "BOTTOMLEFT", "FloBarEARTH", "TOPLEFT", 0, 0 },
-		["FloBarWATER"] = { "BOTTOMLEFT", "FloBarFIRE", "TOPLEFT", 0, 0 },
-		["FloBarAIR"] = { "BOTTOMLEFT", "FloBarWATER", "TOPLEFT", 0, 0 },
-		["FloBarCALL"] = { "RIGHT", "FloBarEARTH", "LEFT", -3, 0 },
-	},
-}
-FLO_TOTEM_LAYOUTS_ORDER = {
-	"1row",
-	"2rows",
-	"4rows",
-	"2rows-reverse",
-	"4rows-reverse"
-}
+
