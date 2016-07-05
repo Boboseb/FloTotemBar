@@ -8,6 +8,8 @@ if not FLOLIB_VERSION or FLOLIB_VERSION < 1.35 then
 
 local _
 local NUM_SPELL_SLOTS = 10;
+local SCHOOL_COLORS = { 1.0, 0.7, 0.0 };
+
 FLOLIB_VERSION = 1.35;
 
 FLOLIB_ACTIVATE_SPEC = GetSpellInfo(200749);
@@ -227,7 +229,7 @@ function FloLib_Setup(self)
 	end
 
 	local numSpells = 0;
-	local button;
+	local button, coutdown;
 	local isKnown, spell;
 	local i = 1;
 	local id, j, n;
@@ -303,16 +305,8 @@ function FloLib_Setup(self)
 	if not InCombatLockdown() then
 		if numSpells > 0 then
 
-			local timerOffset;
-			if _G[self:GetName().."Countdown"] then
-				timerOffset = 15;
-			elseif _G[self:GetName().."Countdown3"] then
-				timerOffset = 37;
-			else
-				timerOffset = 0;
-			end
-			self:Show();
-			self:SetWidth(numSpells * 35 + 12 + timerOffset);
+                        self:Show();
+			self:SetWidth(numSpells * 42 + 12 );
 
 			local group;
 			if LBF then
@@ -321,6 +315,7 @@ function FloLib_Setup(self)
 
 			for i=1, NUM_SPELL_SLOTS do
 				button = _G[self:GetName().."Button"..i];
+				countdown = _G[self:GetName().."Countdown"..i];
 				
 				-- Add the button to ButtonFacade
 				if group then
@@ -329,8 +324,10 @@ function FloLib_Setup(self)
 
 				if i <= numSpells then
 					button:Show();
+					countdown:Show();
 				else
 					button:Hide();
+					countdown:Hide();
 				end
 			end
 		else
@@ -425,6 +422,85 @@ function FloLib_Button_SetTooltip(self)
 	end
 end
 
+function FloLib_StartTimer(self, spellName, rank, guid, spellid)
+
+	local founded = false;
+	local haveTotem, name, startTime, duration, icon;
+	local countdown;
+	local i;
+
+	-- Find spell
+	for i = 1, #self.spells do
+		if self.spells[i].id == spellid or self.spells[i].talented == spellid then
+			founded = i;
+
+			duration = self.spells[i].duration;
+			startTime = GetTime();
+			break;
+		end
+	end
+
+	if founded then
+
+		self["activeSpell"..founded] = founded;
+		self["startTime"..founded] = startTime;
+
+		countdown = _G[self:GetName().."Countdown"..founded];
+		if countdown then
+			countdown:SetMinMaxValues(0, duration);
+			countdown:SetStatusBarColor(unpack(SCHOOL_COLORS));
+		end
+		FloLib_OnUpdate(self);
+	end
+end
+
+function FloLib_OnUpdate(self)
+
+	local isActive;
+	local button;
+	local countdown;
+	local timeleft;
+	local duration;
+	local name, spell;
+	local i;
+
+	for i=1, #self.spells do
+
+		name = self:GetName();
+		button = _G[name.."Button"..i];
+
+		spell = self.spells[i];
+
+		isActive = false;
+
+		if self["activeSpell"..i] == i then
+
+		        countdown = _G[name.."Countdown"..i];
+	        	if countdown then
+			        _, duration = countdown:GetMinMaxValues();
+
+			        timeleft = self["startTime"..i] + duration - GetTime();
+			        isActive = timeleft > 0;
+
+			        if (isActive) then
+				        countdown:SetValue(timeleft);
+				        break;
+			        else
+				        self["activeSpell"..i] = nil;
+				        countdown:SetValue(0);
+			        end
+		        else
+			        isActive = self["startTime"..k] ~= 0;
+		        end
+	        end
+
+		if isActive then
+			button:SetChecked(true);
+		else
+			button:SetChecked(false);
+		end
+	end
+end
 
 -- Bar Dropdown
 function FloLib_BarDropDown_OnLoad(self)
