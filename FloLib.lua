@@ -484,13 +484,12 @@ function FloLib_OnUpdate(self)
 
 			        if (isActive) then
 				        countdown:SetValue(timeleft);
-				        break;
 			        else
 				        self["activeSpell"..i] = nil;
 				        countdown:SetValue(0);
 			        end
 		        else
-			        isActive = self["startTime"..k] ~= 0;
+			        isActive = self["startTime"..i] ~= 0;
 		        end
 	        end
 
