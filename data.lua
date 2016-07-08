@@ -5,10 +5,10 @@
 FLO_TOTEM_SPELLS = {
 	["HUNTER"] = {
 		["TRAP"] = {
-			{ id = 187650, talented = 162488, school = 1 }, -- Freezing trap / Steel trap
-			{ id = 187698, talented = 194277, school = 2 }, -- Tar trap / Caltrops
-			{ id = 191433, school = 3 }, -- Explosive trap
-			{ id = 1543, duration = 20, school = 4 }
+			{ id = 187650, talented = 162488, algo = 2 }, -- Freezing trap / Steel trap
+			{ id = 187698, talented = 194277, algo = 3 }, -- Tar trap / Caltrops
+			{ id = 191433, algo = 1 }, -- Explosive trap
+			{ id = 1543, duration = 20, algo = 4 }
 		}
 	},
 	["SHAMAN"] = {

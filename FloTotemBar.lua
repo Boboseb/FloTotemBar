@@ -51,16 +51,6 @@ function FloTotemBar_OnLoad(self)
 		[4] = function() end
 	};
 	
-	-- Re-anchor the first button, link it to the timer
-	local thisName = self:GetName();
-	local button = _G[thisName.."Button1"];
-
-	if thisName == "FloBarTRAP" then
-		button:SetPoint("LEFT", thisName.."Countdown4", "RIGHT", 5, 0);
-	elseif thisName ~= "FloBarCALL" then
-		button:SetPoint("LEFT", thisName.."Countdown", "RIGHT", 5, 0);
-	end
-
 	-- Class-based setup, abort if not supported
 	_, FLO_CLASS_NAME = UnitClass("player");
 	FLO_CLASS_NAME = strupper(FLO_CLASS_NAME);
@@ -71,6 +61,7 @@ function FloTotemBar_OnLoad(self)
 		return;
 	end
 	
+	local thisName = self:GetName();
 	self.totemtype = string.sub(thisName, 7);
 
 	-- Store the spell list for later
@@ -86,11 +77,6 @@ function FloTotemBar_OnLoad(self)
 	self.SetupSpell = FloTotemBar_SetupSpell;
 	self.OnSetup = FloTotemBar_OnSetup;
 	self.menuHooks = { SetPosition = FloTotemBar_SetPosition, SetBorders = FloTotemBar_SetBorders };
-	if FLO_CLASS_NAME == "SHAMAN" then
-		if self.totemtype ~= "CALL" then
-			self.slot = _G[self.totemtype.."_TOTEM_SLOT"];
-		end
-	end
 	self:EnableMouse(1);
 	
 	if SHOW_WELCOME then
@@ -140,7 +126,7 @@ function FloTotemBar_OnEvent(self, event, arg1, ...)
 
 	elseif event == "UNIT_SPELLCAST_SUCCEEDED" then
 		if arg1 == "player" then
-			FloTotemBar_StartTimer(self, ...);
+			FloLib_StartTimer(self, ...);
 		end
 
 	elseif event == "UNIT_SPELLCAST_INTERRUPTED" then
@@ -150,7 +136,7 @@ function FloTotemBar_OnEvent(self, event, arg1, ...)
 		end
 
 	elseif event == "SPELL_UPDATE_COOLDOWN" or event == "ACTIONBAR_UPDATE_USABLE" then
-		FloTotemBar_TryAddFixupTrapAction();
+		--FloTotemBar_TryAddFixupTrapAction();
 		FloLib_UpdateState(self);
 
 	elseif event == "PLAYER_DEAD" then
@@ -179,9 +165,9 @@ function FloTotemBar_OnEvent(self, event, arg1, ...)
 	else
 		-- Events used for totem destruction detection
 		local k, v;
-		for k, v in pairs(SCHOOL_COLORS) do
+		for k, v in pairs(self.spells) do
 			if arg1 and self["activeSpell"..k] and self.spells[self["activeSpell"..k]] then
-				self.spells[self["activeSpell"..k]].algo(self, arg1, self["activeSpell"..k], ...);
+				self.spells[k].algo(self, arg1, self["activeSpell"..k], ...);
 			end
 		end
 	end
@@ -350,9 +336,9 @@ function FloTotemBar_CheckTrapLife(self, timestamp, spellIdx, event, hideCaster,
 
 	if event ~= nil and strsub(event, 1, 5) == "SPELL" and event ~= "SPELL_CAST_SUCCESS" and event ~= "SPELL_CREATE" and string.find(string.upper(spellName), name, 1, true) then
 		if CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MINE) then
-			FloTotemBar_ResetTimer(self, spell.school);
+			FloTotemBar_ResetTimer(self, spellIdx);
 		else
-			FloTotemBar_TimerRed(self, spell.school);
+			FloTotemBar_TimerRed(self, spellIdx);
 		end
 	end
 end
@@ -369,24 +355,17 @@ function FloTotemBar_CheckTrap2Life(self, timestamp, spellIdx, event, hideCaster
 		);
 
 	if event ~= nil and strsub(event, 1, 5) == "SWING" and CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MY_GUARDIAN) then
-		FloTotemBar_ResetTimer(self, spell.school);
+		FloTotemBar_ResetTimer(self, spellIdx);
 	end
 end
 
 function FloTotemBar_SetupSpell(self, spell, pos)
 
-	local duration, algo, school, glyphed, spellName, spellTexture;
+	local duration, algo, algoIdx, spellName, spellTexture;
 
-        if spell.glyph and FloLib_IsGlyphActive(spell.glyph) then
-                school = spell.glyphedSchool;
-                glyphed = spell.glyphed;
-                spellName = spell.glyphedName;
-                spellTexture = spell.glyphedTexture;
-        else
-                school = spell.school;
-                spellName = spell.name;
-                spellTexture = spell.texture;
-        end
+        algoIdx = spell.algo;
+        spellName = spell.name;
+        spellTexture = spell.texture;
 
 	-- Avoid tainting
 	if not InCombatLockdown() then
@@ -405,10 +384,10 @@ function FloTotemBar_SetupSpell(self, spell, pos)
 		algo = FloTotemBar_UpdateTotem;
 	elseif FLO_CLASS_NAME == "HUNTER" then
 		duration = spell.duration or 60;
-		algo = ALGO_TRAP[school];
+		algo = ALGO_TRAP[algoIdx];
 	end
 
-	self.spells[pos] = { id = spell.id, name = spellName, addName = spell.addName, duration = duration, algo = algo, school = school, talented = spell.talented, glyphed = glyphed };
+	self.spells[pos] = { id = spell.id, name = spellName, addName = spell.addName, duration = duration, algo = algo, talented = spell.talented };
 
 end
 
@@ -624,11 +603,11 @@ function FloTotemBar_StartTimer(self, spellName, rank, guid, spellid)
 
 			if FLO_CLASS_NAME == "SHAMAN" then
 				haveTotem, name, startTime, duration, icon = GetTotemInfo(self.slot);
-				school = "";
+				school = i;
 			else
 				duration = self.spells[i].duration;
 				startTime = GetTime();
-				school = self.spells[i].school;
+				school = i;
 			end
 			break;
 		end
