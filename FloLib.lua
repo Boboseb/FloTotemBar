@@ -454,6 +454,12 @@ function FloLib_StartTimer(self, spellName, rank, guid, spellid)
 	end
 end
 
+function FloLib_ResetTimer(self, pos)
+
+	self["startTime"..pos] = 0;
+	FloLib_OnUpdate(self);
+end
+
 function FloLib_OnUpdate(self)
 
 	local isActive;
