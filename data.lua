@@ -13,19 +13,19 @@ FLO_TOTEM_SPELLS = {
 	},
 	["SHAMAN"] = {
 		["EARTH"] = {
-			{ id = 5394 }, -- 13 Healing Stream Totem
-			{ id = 210643 }, -- 15 Totem Mastery
-			{ id = 192077 }, -- 30 Wind Rush Totem
-			{ id = 51485 }, -- 45 Earthgrab Totem
-			{ id = 192058 }, -- 45 Lightning Surge Totem
-			{ id = 196932 }, -- 45 Voodoo Totem
-			{ id = 61882 }, -- 52 Earthquake Totem
-			{ id = 108280 }, -- 54 Healing Tide Totem
-			{ id = 98008 }, -- 62 Spirit Link Totem
-			{ id = 207399 }, -- 75 Ancestral Protection Totem
-			{ id = 198838 }, -- 75 Earthen Shield Totem
-			{ id = 157153 }, -- 90 Cloudburst Totem
-			{ id = 192222 }, -- 100 Liquid Magma Totem
+			{ id = 5394, duration = 15 }, -- 13 Healing Stream Totem
+			{ id = 210643, duration = 120 }, -- 15 Totem Mastery
+			{ id = 192077, duration = 15 }, -- 30 Wind Rush Totem
+			{ id = 51485, duration = 20 }, -- 45 Earthgrab Totem
+			{ id = 192058, duration = 2 }, -- 45 Lightning Surge Totem
+			{ id = 196932, duration = 10 }, -- 45 Voodoo Totem
+			{ id = 61882, duration = 10 }, -- 52 Earthquake Totem
+			{ id = 108280, duration = 10 }, -- 54 Healing Tide Totem
+			{ id = 98008, duration = 6 }, -- 62 Spirit Link Totem
+			{ id = 207399, duration = 30 }, -- 75 Ancestral Protection Totem
+			{ id = 198838, duration = 15 }, -- 75 Earthen Shield Totem
+			{ id = 157153, duration = 15 }, -- 90 Cloudburst Totem
+			{ id = 192222, duration = 15 }, -- 100 Liquid Magma Totem
 		}
 	}
 };

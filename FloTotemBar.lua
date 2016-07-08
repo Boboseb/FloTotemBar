@@ -144,7 +144,6 @@ function FloTotemBar_OnEvent(self, event, arg1, ...)
 
 	elseif event == "ADDON_LOADED" and arg1 == "FloTotemBar" then
 
-
 		FloTotemBar_CheckTalentGroup(FLOTOTEMBAR_OPTIONS.active);
 
 		-- Hook the UIParent_ManageFramePositions function
@@ -164,10 +163,10 @@ function FloTotemBar_OnEvent(self, event, arg1, ...)
 
 	else
 		-- Events used for totem destruction detection
-		local k, v;
-		for k, v in pairs(self.spells) do
-			if arg1 and self["activeSpell"..k] and self.spells[self["activeSpell"..k]] then
-				self.spells[k].algo(self, arg1, self["activeSpell"..k], ...);
+		local i;
+		for i = 1, #self.spells do
+			if arg1 and self["activeSpell"..i] and self.spells[self["activeSpell"..i]] then
+				self.spells[i].algo(self, arg1, i, ...);
 			end
 		end
 	end
@@ -318,15 +317,23 @@ function FloTotemBar_ReadCmd(line)
 	end
 end
 
-function FloTotemBar_UpdateTotem(self, slot)
+function FloTotemBar_UpdateTotem(self, slot, idx)
 
-	if self.slot == slot then
+        local haveTotem, totemName, startTime, duration, icon = GetTotemInfo(slot);
+	local timeleft = GetTotemTimeLeft(slot);
 
-		local duration = GetTotemTimeLeft(slot);
-		if duration == 0 then
-			FloTotemBar_ResetTimer(self, "");
+       	-- Find spell
+	if self.spells[idx].name == totemName then
+		if timeleft == 0 then
+			FloTotemBar_ResetTimer(self, idx);
+                else
+		        local countdown = _G[self:GetName().."Countdown"..idx];
+		        if countdown then
+			        countdown:SetMinMaxValues(0, duration);
+				countdown:SetValue(timeleft);
+                        end
 		end
-	end
+        end
 end
 
 function FloTotemBar_CheckTrapLife(self, timestamp, spellIdx, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, ...)
@@ -382,6 +389,7 @@ function FloTotemBar_SetupSpell(self, spell, pos)
 
 	if FLO_CLASS_NAME == "SHAMAN" then
 		algo = FloTotemBar_UpdateTotem;
+		duration = spell.duration;
 	elseif FLO_CLASS_NAME == "HUNTER" then
 		duration = spell.duration or 60;
 		algo = ALGO_TRAP[algoIdx];
@@ -564,18 +572,12 @@ function FloTotemBar_SetScale(scale)
 
 end
 
-function FloTotemBar_ResetTimer(self, school)
-
-	self["startTime"..school] = 0;
-	FloTotemBar_OnUpdate(self);
-end
-
 function FloTotemBar_ResetTimers(self)
 
-	self.startTime = 0;
-	self.startTime1 = 0;
-	self.startTime2 = 0;
-	self.startTime3 = 0;
+        local i;
+        for i = 1, 10 do
+	        self["startTime"..i] = 0;
+        end
 	FloTotemBar_OnUpdate(self);
 end
 
@@ -584,47 +586,6 @@ function FloTotemBar_TimerRed(self, school)
 	local countdown = _G[self:GetName().."Countdown"..school];
 	if countdown then
 		countdown:SetStatusBarColor(0.5, 0.5, 0.5);
-	end
-
-end
-
-function FloTotemBar_StartTimer(self, spellName, rank, guid, spellid)
-
-	local founded = false;
-	local haveTotem, name, startTime, duration, icon;
-	local countdown;
-	local school;
-	local i;
-
-	-- Find spell
-	for i = 1, #self.spells do
-		if self.spells[i].id == spellid or self.spells[i].talented == spellid then
-			founded = i;
-
-			if FLO_CLASS_NAME == "SHAMAN" then
-				haveTotem, name, startTime, duration, icon = GetTotemInfo(self.slot);
-				school = i;
-			else
-				duration = self.spells[i].duration;
-				startTime = GetTime();
-				school = i;
-			end
-			break;
-		end
-	end
-
-	if founded and school then
-
-		self["activeSpell"..school] = founded;
-		self["startTime"..school] = startTime;
-
-		countdown = _G[self:GetName().."Countdown"..school];
-		if countdown then
-			countdown:SetMinMaxValues(0, duration);
-			countdown:SetStatusBarColor(unpack(SCHOOL_COLORS[school]));
-		end
-		FloTotemBar_OnUpdate(self);
-
 	end
 
 end
