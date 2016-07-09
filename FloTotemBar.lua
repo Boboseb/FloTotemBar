@@ -13,15 +13,6 @@ local VERSION = "7.0.35"
 -------------------------------------------------------------------------------
 local _
 
-local SCHOOL_COLORS = {
-	[""] = { 1.0, 0.7, 0.0 },
-	[1] = { 1.0, 0.3, 0.0 },
-	[2] = { 0.5, 0.5, 1.0 },
-	[3] = { 0.0, 1.0, 0.0 },
-	[4] = { 1.0, 0.7, 0.0 },
-	[5] = { 1.0, 0.7, 0.0 }
-};
-
 local ALGO_TRAP;
 
 local SHOW_WELCOME = true;
@@ -325,7 +316,7 @@ function FloTotemBar_UpdateTotem(self, slot, idx)
        	-- Find spell
 	if self.spells[idx].name == totemName then
 		if timeleft == 0 then
-			FloTotemBar_ResetTimer(self, idx);
+			FloLib_ResetTimer(self, idx);
                 else
 		        local countdown = _G[self:GetName().."Countdown"..idx];
 		        if countdown then
@@ -578,7 +569,7 @@ function FloTotemBar_ResetTimers(self)
         for i = 1, 10 do
 	        self["startTime"..i] = 0;
         end
-	FloTotemBar_OnUpdate(self);
+	FloLib_OnUpdate(self);
 end
 
 function FloTotemBar_TimerRed(self, school)
@@ -588,56 +579,6 @@ function FloTotemBar_TimerRed(self, school)
 		countdown:SetStatusBarColor(0.5, 0.5, 0.5);
 	end
 
-end
-
-function FloTotemBar_OnUpdate(self)
-
-	local isActive;
-	local button;
-	local countdown;
-	local timeleft;
-	local duration;
-	local name, spell;
-	local i, k, v;
-
-	for i=1, #self.spells do
-
-		name = self:GetName();
-		button = _G[name.."Button"..i];
-
-		spell = self.spells[i];
-
-		isActive = false;
-		for k, v in pairs(SCHOOL_COLORS) do
-
-			if self["activeSpell"..k] == i then
-
-				countdown = _G[name.."Countdown"..k];
-				if countdown then
-					_, duration = countdown:GetMinMaxValues();
-
-					timeleft = self["startTime"..k] + duration - GetTime();
-					isActive = timeleft > 0;
-
-					if (isActive) then
-						countdown:SetValue(timeleft);
-						break;
-					else
-						self["activeSpell"..k] = nil;
-						countdown:SetValue(0);
-					end
-				else
-					isActive = self["startTime"..k] ~= 0;
-				end
-			end
-		end
-
-		if isActive then
-			button:SetChecked(true);
-		else
-			button:SetChecked(false);
-		end
-	end
 end
 
 function FloTotemBar_OnEnter(self)
