@@ -249,8 +249,8 @@ function FloLib_Setup(self)
 
 		if isKnown then
 			spell.name, spell.addName, spell.texture = GetSpellInfo(spell.id);
-			if spell.glyphed and not spell.nameGlyphed then
-				spell.glyphedName, _, spell.glyphedTexture = GetSpellInfo(spell.glyphed);
+			if spell.talented and not spell.talentedName then
+				spell.talentedName = GetSpellInfo(spell.talented);
 			end
 			self:SetupSpell(spell, i);
 			i = i + 1;
@@ -273,8 +273,8 @@ function FloLib_Setup(self)
 
 		spell = self.availableSpells[n];
 		spell.name, spell.addName, spell.texture = GetSpellInfo(spell.id);
-		if spell.glyphed and not spell.nameGlyphed then
-			spell.glyphedName, _, spell.glyphedTexture = GetSpellInfo(spell.glyphed);
+		if spell.talented and not spell.talentedName then
+			spell.talentedName = GetSpellInfo(spell.talented);
 		end
 
 		-- Check if this spell is already positionned
@@ -361,9 +361,7 @@ function FloLib_UpdateState(self)
 		--Cooldown stuffs
 		cooldown = _G[self:GetName().."Button"..i.."Cooldown"];
                 start, duration, enable, charges, maxCharges = GetSpellCooldown(spell.id);
-                if spell.glyphed then
-                        start, duration, enable = GetSpellCooldown(spell.glyphed);
-                elseif spell.talented then
+                if spell.talented then
 			start2, duration2, enable2 = GetSpellCooldown(spell.talented);
 			if start > 0 and start2 > 0 then
 				start = math.min(start, start2);
