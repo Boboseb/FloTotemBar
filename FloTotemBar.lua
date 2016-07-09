@@ -314,16 +314,15 @@ function FloTotemBar_UpdateTotem(self, slot, idx)
 	local timeleft = GetTotemTimeLeft(slot);
 
        	-- Find spell
-	if self.spells[idx].name == totemName then
-		if timeleft == 0 then
-			FloLib_ResetTimer(self, idx);
-                else
-		        local countdown = _G[self:GetName().."Countdown"..idx];
-		        if countdown then
-			        countdown:SetMinMaxValues(0, duration);
-				countdown:SetValue(timeleft);
-                        end
-		end
+	if totemName == "" and self.spells[idx].slot == slot then
+		FloLib_ResetTimer(self, idx);
+        elseif self.spells[idx].name == totemName then
+                self.spells[idx].slot = slot;
+	        local countdown = _G[self:GetName().."Countdown"..idx];
+	        if countdown then
+		        countdown:SetMinMaxValues(0, duration);
+			countdown:SetValue(timeleft);
+                end
         end
 end
 
