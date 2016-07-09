@@ -38,7 +38,7 @@ function FloTotemBar_OnLoad(self)
 	ALGO_TRAP = {
 		[1] = FloTotemBar_CheckTrapLife,
 		[2] = FloTotemBar_CheckTrapLife,
-		[3] = FloTotemBar_CheckTrap2Life,
+		[3] = FloTotemBar_CheckTrapLife,
 		[4] = function() end
 	};
 	
@@ -331,16 +331,19 @@ function FloTotemBar_CheckTrapLife(self, timestamp, spellIdx, event, hideCaster,
 
 	local spell = self.spells[spellIdx];
 	local name = string.upper(spell.name);
+	local talentedName;
+        if spell.talentedName then talentedName = string.upper(spell.talentedName) end
 
-	if event ~= nil and strsub(event, 1, 5) == "SPELL" and event ~= "SPELL_CAST_SUCCESS" and event ~= "SPELL_CREATE" and string.find(string.upper(spellName), name, 1, true) then
+	if event ~= nil and strsub(event, 1, 5) == "SPELL" and (string.find(string.upper(spellName), name, 1, true) or (talentedName and string.find(string.upper(spellName), talentedName, 1, true))) and destGUID ~= "" then
 		if CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MINE) then
-			FloTotemBar_ResetTimer(self, spellIdx);
+			FloLib_ResetTimer(self, spellIdx);
 		else
 			FloTotemBar_TimerRed(self, spellIdx);
 		end
 	end
 end
 
+-- For old Serpent Trap I think
 function FloTotemBar_CheckTrap2Life(self, timestamp, spellIdx, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, ...)
 
 	local spell = self.spells[spellIdx];
@@ -353,7 +356,7 @@ function FloTotemBar_CheckTrap2Life(self, timestamp, spellIdx, event, hideCaster
 		);
 
 	if event ~= nil and strsub(event, 1, 5) == "SWING" and CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MY_GUARDIAN) then
-		FloTotemBar_ResetTimer(self, spellIdx);
+		FloLib_ResetTimer(self, spellIdx);
 	end
 end
 
@@ -386,7 +389,7 @@ function FloTotemBar_SetupSpell(self, spell, pos)
 		algo = ALGO_TRAP[algoIdx];
 	end
 
-	self.spells[pos] = { id = spell.id, name = spellName, addName = spell.addName, duration = duration, algo = algo, talented = spell.talented };
+	self.spells[pos] = { id = spell.id, name = spellName, addName = spell.addName, duration = duration, algo = algo, talented = spell.talented, talentedName = spell.talentedName };
 
 end
 
