@@ -13,6 +13,7 @@ FLO_TOTEM_SPELLS = {
 	},
 	["SHAMAN"] = {
 		["EARTH"] = {
+                        { id = 2484, duration = 20 }, -- 8 Earthbind Totem
 			{ id = 5394, duration = 15 }, -- 13 Healing Stream Totem
 			{ id = 210643, duration = 120 }, -- 15 Totem Mastery
 			{ id = 192077, duration = 15 }, -- 30 Wind Rush Totem
