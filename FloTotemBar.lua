@@ -394,12 +394,15 @@ end
 
 function FloTotemBar_OnSetup(self)
 
-	if next(self.spells) == nil then
-		UnregisterStateDriver(self, "visibility")
-	else
-		local stateCondition = "nopetbattle,nooverridebar,novehicleui,nopossessbar"
-		RegisterStateDriver(self, "visibility", "["..stateCondition.."] show; hide")
-	end
+	-- Avoid tainting
+	if not InCombatLockdown() then
+	        if next(self.spells) == nil then
+		        UnregisterStateDriver(self, "visibility")
+	        else
+		        local stateCondition = "nopetbattle,nooverridebar,novehicleui,nopossessbar"
+		        RegisterStateDriver(self, "visibility", "["..stateCondition.."] show; hide")
+	        end
+        end
 
 	FloTotemBar_ResetTimers(self);
 end
