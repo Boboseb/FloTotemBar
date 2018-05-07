@@ -419,30 +419,16 @@ function FloTotemBar_UpdatePosition(self)
 
 	self:ClearAllPoints();
 	if self == FloBarEARTH or self == FloBarTRAP then
-		local yOffset = -3;
+		local yOffset = 0;
 		local yOffset1 = 0;
 		local yOffset2 = 0;
 		local anchorFrame;
 
 		if not MainMenuBar:IsShown() and not (VehicleMenuBar and VehicleMenuBar:IsShown()) then
 			anchorFrame = UIParent;
-			yOffset = 110-UIParent:GetHeight();
+			yOffset = 110 - UIParent:GetHeight();
 		else
 			anchorFrame = MainMenuBar;
-
-                        local numWatchBars = 0;
-		        numWatchBars = numWatchBars + (ReputationWatchBar:IsShown() and 1 or 0);
-		        numWatchBars = numWatchBars + (HonorWatchBar:IsShown() and 1 or 0);
-		        numWatchBars = numWatchBars + (ArtifactWatchBar:IsShown() and 1 or 0);
-                        numWatchBars = numWatchBars + (MainMenuExpBar:IsShown() and 1 or 0);
-
-			if numWatchBars > 1 then
-				yOffset = yOffset + 9;
-			end
-
-			if MainMenuBarMaxLevelBar:IsShown() then
-				yOffset = yOffset - 5;
-			end
 
 			if SHOW_MULTI_ACTIONBAR_2 then
 				yOffset2 = yOffset2 + 45;
@@ -454,11 +440,11 @@ function FloTotemBar_UpdatePosition(self)
 		end
 
 		if FLO_CLASS_NAME == "HUNTER" then
-                        if FloAspectBar ~= nil then
-                                self:SetPoint("LEFT", FloAspectBar, "RIGHT", 10/ACTIVE_OPTIONS.scale, 0);
-                        else
-			        self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 512/ACTIVE_OPTIONS.scale, (yOffset + yOffset2)/ACTIVE_OPTIONS.scale);
-                        end
+            if FloAspectBar ~= nil then
+                self:SetPoint("LEFT", FloAspectBar, "RIGHT", 10/ACTIVE_OPTIONS.scale, 0);
+            else
+			    self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 512/ACTIVE_OPTIONS.scale, (yOffset + yOffset2)/ACTIVE_OPTIONS.scale);
+            end
 		else
 			self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 464, (yOffset + yOffset1)/ACTIVE_OPTIONS.scale);
 		end
