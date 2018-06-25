@@ -5,15 +5,16 @@
 FLO_TOTEM_SPELLS = {
 	["HUNTER"] = {
 		["TRAP"] = {
-			{ id = 187650, talented = 162488, algo = 2 }, -- Freezing trap / Steel trap
-			{ id = 187698, talented = 194277, algo = 3 }, -- Tar trap / Caltrops
-			{ id = 191433, algo = 1 }, -- Explosive trap
-			{ id = 1543, duration = 20, algo = 4 }
+			{ id = 187650, algo = 2 }, -- Freezing trap
+			{ id = 162488, algo = 2 }, -- Steel trap
+			{ id = 187698, algo = 3 }, -- Tar trap
+			{ id = 1543, duration = 20, algo = 4 }, -- Flare
+			{ id = 109248, duration = 10, algo = 4 }
 		}
 	},
 	["SHAMAN"] = {
 		["EARTH"] = {
-                        { id = 2484, duration = 20 }, -- 8 Earthbind Totem
+            { id = 2484, duration = 20 }, -- 8 Earthbind Totem
 			{ id = 5394, duration = 15 }, -- 13 Healing Stream Totem
 			{ id = 210643, duration = 120 }, -- 15 Totem Mastery
 			{ id = 192077, duration = 15 }, -- 30 Wind Rush Totem
