@@ -4,13 +4,13 @@
 
 -- Some shared functions
 -- Prevent multi-loading
-if not FLOLIB_VERSION or FLOLIB_VERSION < 1.37 then
+if not FLOLIB_VERSION or FLOLIB_VERSION < 1.38 then
 
 	local _
 	local NUM_SPELL_SLOTS = 10;
 	local SCHOOL_COLORS = { 1.0, 0.7, 0.0 };
 	
-	FLOLIB_VERSION = 1.37;
+	FLOLIB_VERSION = 1.38;
 	
 	FLOLIB_ACTIVATE_SPEC = GetSpellInfo(200749);
 	
