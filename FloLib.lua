@@ -305,8 +305,14 @@ if not FLOLIB_VERSION or FLOLIB_VERSION < 1.38 then
 		if not InCombatLockdown() then
 			if numSpells > 0 then
 	
-							self:Show();
-				self:SetWidth(numSpells * 42 + 12 );
+				self:Show();
+				if self.hideCooldowns then
+					self:SetWidth(numSpells * 35 + 9 );
+				elseif self.sharedCooldown then
+					self:SetWidth(numSpells * 35 + 21 );
+				else
+					self:SetWidth(numSpells * 42 + 12 );
+				end
 	
 				local group;
 				if LBF then
@@ -316,15 +322,26 @@ if not FLOLIB_VERSION or FLOLIB_VERSION < 1.38 then
 				for i=1, NUM_SPELL_SLOTS do
 					button = _G[self:GetName().."Button"..i];
 					countdown = _G[self:GetName().."Countdown"..i];
+	
+					if self.sharedCooldown and i == 1 then
+						countdown:SetWidth(6);
+					end
 					
 					-- Add the button to ButtonFacade
 					if group then
 						group:AddButton(button);
 					end
 	
+					if self.hideCooldowns or self.sharedCooldown and i > 1 then
+						button:SetPoint("LEFT", countdown, "LEFT", 0, 0);
+					end
 					if i <= numSpells then
 						button:Show();
-						countdown:Show();
+						if self.hideCooldowns or self.sharedCooldown and i > 1 then
+							countdown:Hide();
+						else
+							countdown:Show();
+						end
 					else
 						button:Hide();
 						countdown:Hide();
@@ -360,8 +377,8 @@ if not FLOLIB_VERSION or FLOLIB_VERSION < 1.38 then
 	
 			--Cooldown stuffs
 			cooldown = _G[self:GetName().."Button"..i.."Cooldown"];
-					start, duration, enable, charges, maxCharges = GetSpellCooldown(spell.id);
-					if spell.talented then
+			start, duration, enable, charges, maxCharges = GetSpellCooldown(spell.id);
+			if spell.talented then
 				start2, duration2, enable2 = GetSpellCooldown(spell.talented);
 				if start > 0 and start2 > 0 then
 					start = math.min(start, start2);
@@ -371,13 +388,13 @@ if not FLOLIB_VERSION or FLOLIB_VERSION < 1.38 then
 				duration = math.max(duration, duration2);
 			end
 	
-					if cooldown.currentCooldownType ~= COOLDOWN_TYPE_NORMAL then
-							cooldown:SetEdgeTexture("Interface\\Cooldown\\edge");
-							cooldown:SetSwipeColor(0, 0, 0);
-							cooldown:SetHideCountdownNumbers(false);
-							cooldown.currentCooldownType = COOLDOWN_TYPE_NORMAL;
-					end
-					CooldownFrame_Set(cooldown, start, duration, enable, charges, maxCharges);
+			if cooldown.currentCooldownType ~= COOLDOWN_TYPE_NORMAL then
+				cooldown:SetEdgeTexture("Interface\\Cooldown\\edge");
+				cooldown:SetSwipeColor(0, 0, 0);
+				cooldown:SetHideCountdownNumbers(false);
+				cooldown.currentCooldownType = COOLDOWN_TYPE_NORMAL;
+			end
+			CooldownFrame_Set(cooldown, start, duration, enable, charges, maxCharges);
 	
 			--Castable stuffs
 			normalTexture = _G[self:GetName().."Button"..i.."NormalTexture"];
@@ -414,6 +431,8 @@ if not FLOLIB_VERSION or FLOLIB_VERSION < 1.38 then
 		end
 		local spell = self:GetParent().spells[self:GetID()];
 		if spell then
+			-- get id of max rank
+			local _, _, _, _, _, _, maxRankId = GetSpellInfo(GetSpellInfo(spell.id));
 			--Display the tooltip
 			GameTooltip:SetSpellByID(spell.id);
 			GameTooltip:Show();
@@ -440,11 +459,16 @@ if not FLOLIB_VERSION or FLOLIB_VERSION < 1.38 then
 	
 		if founded then
 	
-			self["activeSpell"..founded] = founded;
-			self["startTime"..founded] = startTime;
+			if self.sharedCooldown then
+				i = 1
+			else
+				i = founded
+			end
+			self["activeSpell"..i] = founded;
+			self["startTime"..i] = startTime;
 	
-			countdown = _G[self:GetName().."Countdown"..founded];
-			if countdown then
+			countdown = _G[self:GetName().."Countdown"..i];
+			if countdown and not self.hideCooldowns then
 				countdown:SetMinMaxValues(0, duration);
 				countdown:SetStatusBarColor(unpack(SCHOOL_COLORS));
 			end
@@ -454,6 +478,9 @@ if not FLOLIB_VERSION or FLOLIB_VERSION < 1.38 then
 	
 	function FloLib_ResetTimer(self, pos)
 	
+		if self.sharedCooldown then
+			pos = 1
+		end
 		self["startTime"..pos] = 0;
 		FloLib_OnUpdate(self);
 	end
@@ -477,25 +504,33 @@ if not FLOLIB_VERSION or FLOLIB_VERSION < 1.38 then
 	
 			isActive = false;
 	
-			if self["activeSpell"..i] == i then
+			if self.sharedCooldown then
+				pos = 1
+			else
+				pos = i
+			end
+			if self["activeSpell"..pos] == i then
 	
-					countdown = _G[name.."Countdown"..i];
-					if countdown then
+				countdown = _G[name.."Countdown"..pos];
+				if countdown then
+					timeleft = self["startTime"..pos];
+					if not self.hideCooldowns then
 						_, duration = countdown:GetMinMaxValues();
 	
-						timeleft = self["startTime"..i] + duration - GetTime();
-						isActive = timeleft > 0;
-	
-						if (isActive) then
-							countdown:SetValue(timeleft);
-						else
-							self["activeSpell"..i] = nil;
-							countdown:SetValue(0);
-						end
-					else
-						isActive = self["startTime"..i] ~= 0;
+						timeleft = timeleft + duration - GetTime();
 					end
+					isActive = timeleft > 0;
+	
+					if (isActive) then
+						countdown:SetValue(timeleft);
+					else
+						self["activeSpell"..pos] = nil;
+						countdown:SetValue(0);
+					end
+				else
+					isActive = self["startTime"..pos] ~= 0;
 				end
+			end
 	
 			if isActive then
 				button:SetChecked(true);
