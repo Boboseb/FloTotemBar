@@ -37,9 +37,9 @@ elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
 		["HUNTER"] = {
 			["TRAP"] = {
 				{ id = 13795, algo = 1 }, -- Immolation trap
-				{ id = 1499, algo = 2 }, -- Freezing trap
-				{ id = 13809, algo = 3 }, -- Frost trap
-				{ id = 13813, algo = 4 } -- Explosive trap
+				{ id = 1499, algo = 1 }, -- Freezing trap
+				{ id = 13809, algo = 1 }, -- Frost trap
+				{ id = 13813, algo = 1 } -- Explosive trap
 			}
 		},
 		["SHAMAN"] = {
