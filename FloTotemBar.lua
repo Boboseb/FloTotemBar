@@ -379,9 +379,9 @@ function FloTotemBar_CheckTrapLife(self, spellIdx, timestamp, event, hideCaster,
 	local spell = self.spells[spellIdx];
 	local name = string.upper(spell.name);
 	local talentedName;
-        if spell.talentedName then talentedName = string.upper(spell.talentedName) end
+	if spell.talentedName then talentedName = string.upper(spell.talentedName) end
 
-	if event ~= nil and strsub(event, 1, 5) == "SPELL" and (string.find(string.upper(spellName), name, 1, true) or (talentedName and string.find(string.upper(spellName), talentedName, 1, true))) and destGUID ~= "" then
+	if event ~= nil and event ~= "SPELL_CREATE" and strsub(event, 1, 5) == "SPELL" and (string.find(string.upper(spellName), name, 1, true) or (talentedName and string.find(string.upper(spellName), talentedName, 1, true))) and destGUID ~= "" then
 		if CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MINE) then
 			FloLib_ResetTimer(self, spellIdx);
 		else
