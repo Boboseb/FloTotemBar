@@ -434,7 +434,7 @@ if not FLOLIB_VERSION or FLOLIB_VERSION < 1.38 then
 			-- get id of max rank
 			local _, _, _, _, _, _, maxRankId = GetSpellInfo(GetSpellInfo(spell.id));
 			--Display the tooltip
-			GameTooltip:SetSpellByID(spell.id);
+			GameTooltip:SetSpellByID(maxRankId);
 			GameTooltip:Show();
 		end
 	end
