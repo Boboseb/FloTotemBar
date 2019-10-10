@@ -347,8 +347,6 @@ end
 
 function FloTotemBar_UpdateTotem(self, slot, idx)
 
-	local timeleft = GetTotemTimeLeft(slot);
-
 	if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
 		local haveTotem, totemName, startTime, duration, icon = GetTotemInfo(slot);
 
@@ -359,6 +357,8 @@ function FloTotemBar_UpdateTotem(self, slot, idx)
 			self.spells[idx].slot = slot;
 			local countdown = _G[self:GetName().."Countdown"..idx];
 			if countdown then
+				local timeleft = GetTotemTimeLeft(slot);
+
 				countdown:SetMinMaxValues(0, duration);
 				countdown:SetValue(timeleft);
 			end
