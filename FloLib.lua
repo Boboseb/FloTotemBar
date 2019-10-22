@@ -4,13 +4,13 @@
 
 -- Some shared functions
 -- Prevent multi-loading
-if not FLOLIB_VERSION or FLOLIB_VERSION < 1.39 then
+if not FLOLIB_VERSION or FLOLIB_VERSION < 1.40 then
 
 local _
 local NUM_SPELL_SLOTS = 10;
 local SCHOOL_COLORS = { 1.0, 0.7, 0.0 };
 
-FLOLIB_VERSION = 1.39;
+FLOLIB_VERSION = 1.40;
 
 FLOLIB_ACTIVATE_SPEC = GetSpellInfo(200749);
 
@@ -442,15 +442,16 @@ end
 function FloLib_StartTimer(self, guid, spellid)
 
 	local founded = false;
-	local haveTotem, name, startTime, duration, icon;
+	local name, startTime, duration;
 	local countdown;
 	local i;
 
+	name = GetSpellInfo(spellid)
+
 	-- Find spell
 	for i = 1, #self.spells do
-		if self.spells[i].id == spellid or self.spells[i].talented == spellid then
+		if self.spells[i].name == name or self.spells[i].talentedName == name then
 			founded = i;
-
 			duration = self.spells[i].duration;
 			startTime = GetTime();
 			break;
