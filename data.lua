@@ -74,6 +74,16 @@ elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
 				{ id = 8835, duration = 120 }, -- grace of air
 				{ id = 25908, duration = 120 }, -- tranquil air
 			}
+		},
+		["PALADIN"] = {
+			["SEAL"] = {
+				{ id = 20154 }, -- righteousness
+				{ id = 21082 }, -- Crusader
+				{ id = 20164 }, -- justice
+				{ id = 20375 }, -- command
+				{ id = 20165 }, -- light
+				{ id = 20166 } -- wisdom
+			}
 		}
 	};
 	FLO_TOTEM_LAYOUTS = {
