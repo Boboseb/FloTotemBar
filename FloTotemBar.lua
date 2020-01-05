@@ -8,9 +8,9 @@
 
 local VERSION
 if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-	VERSION = "8.2.40"
+	VERSION = "8.2.41"
 elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
-	VERSION = "1.13.40"
+	VERSION = "1.13.41"
 end
 
 -------------------------------------------------------------------------------
@@ -161,17 +161,17 @@ function FloTotemBar_OnEvent(self, event, arg1, ...)
 	elseif event == "PLAYER_DEAD" then
 		FloTotemBar_ResetTimers(self);
 
-	elseif event == "ADDON_LOADED" and arg1 == "FloTotemBar" then
+	elseif (event == "ADDON_LOADED" and arg1 == "FloTotemBar") or event == "UPDATE_BINDINGS" then
+		if event == "ADDON_LOADED" then
+			FloTotemBar_CheckTalentGroup(FLOTOTEMBAR_OPTIONS.active);
 
-		FloTotemBar_CheckTalentGroup(FLOTOTEMBAR_OPTIONS.active);
-
-		-- Hook the UIParent_ManageFramePositions function
-		hooksecurefunc("UIParent_ManageFramePositions", FloTotemBar_UpdatePositions);
-		if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-			hooksecurefunc("SetSpecialization", function() changingSpec = true; end);
+			-- Hook the UIParent_ManageFramePositions function
+			hooksecurefunc("UIParent_ManageFramePositions", FloTotemBar_UpdatePositions);
+			if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+				hooksecurefunc("SetSpecialization", function() changingSpec = true; end);
+			end
 		end
 
-	elseif event == "UPDATE_BINDINGS" then
 		local totemtype = self.totemtype;
 		if totemtype == "TRAP" then totemtype = "EARTH" end
 		FloLib_UpdateBindings(self, "FLOTOTEM"..totemtype);
