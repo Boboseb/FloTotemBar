@@ -108,15 +108,8 @@ function FloTotemBar_OnLoad(self)
 		end
 		self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED");
 	end
-	self:RegisterEvent("PLAYER_ENTERING_WORLD");
 	self:RegisterEvent("LEARNED_SPELL_IN_TAB");
-	if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-		self:RegisterEvent("PLAYER_TALENT_UPDATE");
-		self:RegisterEvent("PLAYER_PVP_TALENT_UPDATE");
-	end
 	self:RegisterEvent("CHARACTER_POINTS_CHANGED");
-	self:RegisterEvent("PLAYER_ALIVE");
-	self:RegisterEvent("PLAYER_LEVEL_UP");
 	self:RegisterEvent("SPELLS_CHANGED");
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN");
 	self:RegisterEvent("ACTIONBAR_UPDATE_USABLE");
@@ -137,9 +130,13 @@ end
 
 function FloTotemBar_OnEvent(self, event, arg1, ...)
 
-	if event == "PLAYER_ENTERING_WORLD" or event == "LEARNED_SPELL_IN_TAB" or event == "PLAYER_ALIVE" or event == "PLAYER_LEVEL_UP" or event == "CHARACTER_POINTS_CHANGED" or event == "PLAYER_TALENT_UPDATE" or event == "PLAYER_PVP_TALENT_UPDATE" or event == "SPELLS_CHANGED" then
+	if event == "LEARNED_SPELL_IN_TAB" or event == "CHARACTER_POINTS_CHANGED" or event == "SPELLS_CHANGED" then
 		if not changingSpec then
-			FloLib_Setup(self);
+			if GetSpecialization() ~= FLOTOTEMBAR_OPTIONS.active then
+				FloTotemBar_CheckTalentGroup(GetSpecialization());
+			else
+				FloLib_Setup(self);
+			end
 		end
 
 	elseif event == "UNIT_SPELLCAST_SUCCEEDED" then
