@@ -387,7 +387,7 @@ function FloTotemBar_CheckTrapLife(self, spellIdx, timestamp, event, hideCaster,
 	local spell = self.spells[spellIdx];
 	local name = string.upper(spell.name);
 
-	_, _, spellTexture = GetSpellInfo(spellId);
+	_, _, spellTexture = GetSpellInfo(spell.id);
 	-- bad french localisation
 	if spellName == "Effet Piège immolation" then spellName = "Effet Piège d'immolation" end
 
