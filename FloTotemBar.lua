@@ -273,14 +273,15 @@ function FloTotemBar_TalentGroupChanged(grp)
 	FloTotemBar_CheckTalentGroup(grp);
 	for k, v in pairs(ACTIVE_OPTIONS.barSettings) do
 		local bar = _G["FloBar"..k];
-                if bar ~= nil then
-		        FloLib_Setup(bar);
-		        -- Restore position
-		        if v.position ~= "auto" and v.refPoint then
-			        bar:ClearAllPoints();
-			        bar:SetPoint(unpack(v.refPoint));
-		        end
+		if bar ~= nil then
+			FloLib_Setup(bar);
+			FloTotemBar_ResetTimers(bar);
+			-- Restore position
+			if v.position ~= "auto" and v.refPoint then
+				bar:ClearAllPoints();
+				bar:SetPoint(unpack(v.refPoint));
 			end
+		end
 	end
 end
 
@@ -481,7 +482,6 @@ function FloTotemBar_OnSetup(self)
 	        end
         end
 
-	FloTotemBar_ResetTimers(self);
 end
 
 function FloTotemBar_UpdatePosition(self)
