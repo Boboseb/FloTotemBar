@@ -7,7 +7,7 @@
 	<Script file="data.lua"/>
 	<Script file="FloTotemBar.lua"/>
 
-	<Frame name="FloBarTRAP" inherits="FloBarTemplateT">
+	<Frame name="FloBarTRAP" inherits="FloBarTemplateT, BackdropTemplate">
 		<Size>
 			<AbsDimension x="44" y="44"/>
 		</Size>
@@ -24,7 +24,7 @@
 		</Scripts>
 	</Frame>
 
-	<Frame name="FloTotemBarTemplate" inherits="FloBarTemplateT" virtual="true">
+	<Frame name="FloTotemBarTemplate" inherits="FloBarTemplateT, BackdropTemplate" virtual="true">
 		<Size>
 			<AbsDimension x="44" y="44"/>
 		</Size>
@@ -82,7 +82,7 @@
 		</Anchors>
 	</Frame>
 
-	<Frame name="FloBarSEAL" inherits="FloBarTemplateT">
+	<Frame name="FloBarSEAL" inherits="FloBarTemplateT, BackdropTemplate">
 		<Size>
 			<AbsDimension x="44" y="44"/>
 		</Size>
