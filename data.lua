@@ -10,18 +10,18 @@ if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
 				{ id = 162488, algo = 2 }, -- Steel trap
 				{ id = 187698, algo = 3 }, -- Tar trap
 				{ id = 1543, duration = 20, algo = 4 }, -- Flare
-				{ id = 109248, duration = 10, algo = 4 }, -- Binding Shot
-				{ id = 328231, duration = 15, algo = 4 }, -- Wild Spirits
-                { id = 308491, duration = 10, algo = 4 } -- Resonating Arrow
+				{ id = 109248, duration = 10, algo = 4 }
 			}
 		},
 		["SHAMAN"] = {
 			["EARTH"] = {
-				{ id = 2484, duration = 20 }, -- 5 Earthbind Totem
-				{ id = 5394, duration = 15, talented = 157153 }, -- 28 Healing Stream Totem / Cloudburst Totem
+				{ id = 2484, duration = 20 }, -- 8 Earthbind Totem
+				{ id = 5394, duration = 15, talented = 157153 }, -- 13 Healing Stream Totem / Cloudburst Totem
+				{ id = 210643, duration = 120, talented = 262395 }, -- 15 Totem Mastery
 				{ id = 192077, duration = 15 }, -- 30 Wind Rush Totem
 				{ id = 51485, duration = 20 }, -- 45 Earthgrab Totem
 				{ id = 192058, duration = 2 }, -- 45 Lightning Surge Totem
+				{ id = 196932, duration = 10 }, -- 45 Voodoo Totem
 				{ id = 61882, duration = 10 }, -- 52 Earthquake Totem
 				{ id = 108280, duration = 10 }, -- 54 Healing Tide Totem
 				{ id = 8143, duration = 10 }, -- 58 Tremor Totem
@@ -29,13 +29,10 @@ if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
 				{ id = 207399, duration = 30 }, -- 75 Ancestral Protection Totem
 				{ id = 198838, duration = 15 }, -- 75 Earthen Shield Totem
 				{ id = 192222, duration = 15 }, -- 100 Liquid Magma Totem
-				{ id = 16191, duration = 8 }, -- 38 Mana Tide Totem
-				{ id = 8512, duration = 120 }, -- 49 Windfury
-				{ id = 324386, duration = 30 }, -- Vesper Totem
 			}
 		}
 	};
-elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC or WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
 	FLO_TOTEM_SPELLS = {
 		["HUNTER"] = {
 			["TRAP"] = {
