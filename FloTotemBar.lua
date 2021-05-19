@@ -11,6 +11,8 @@ if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
 	VERSION = "8.3.43"
 elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
 	VERSION = "1.13.43"
+elseif WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
+	VERSION = "2.5.1"
 end
 
 -------------------------------------------------------------------------------
@@ -38,7 +40,7 @@ local ACTIVE_OPTIONS = FLOTOTEMBAR_OPTIONS[1];
 local changingSpec = true;
 
 local GetSpecialization = GetSpecialization;
-if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC or WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
 	GetSpecialization = function ()
 		return 1
 	end
@@ -68,7 +70,7 @@ function FloTotemBar_OnLoad(self)
 		return;
 	end
 	
-	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC or WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
 		self.sharedCooldown = true;
 	end
 
@@ -88,7 +90,7 @@ function FloTotemBar_OnLoad(self)
 	self.SetupSpell = FloTotemBar_SetupSpell;
 	self.OnSetup = FloTotemBar_OnSetup;
 	self.menuHooks = { SetPosition = FloTotemBar_SetPosition, SetBorders = FloTotemBar_SetBorders };
-	if FLO_CLASS_NAME == "SHAMAN" and WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+	if FLO_CLASS_NAME == "SHAMAN" and (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC or WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC) then
 		self.menuHooks.SetLayoutMenu = FloTotemBar_SetLayoutMenu;
 		self.slot = _G[self.totemtype.."_TOTEM_SLOT"];
 	end
@@ -371,7 +373,7 @@ function FloTotemBar_UpdateTotem(self, slot, idx)
 				countdown:SetValue(timeleft);
 			end
 		end
-	elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+	elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC or WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
 		if self.slot == slot then
 
 			local haveTotem, totemName, startTime, duration, icon = GetTotemInfo(slot);
@@ -496,7 +498,7 @@ function FloTotemBar_UpdatePosition(self)
 	end
 
 	local layout
-	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC or WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
 		layout = FLO_TOTEM_LAYOUTS[ACTIVE_OPTIONS.barLayout];
 	end
 
@@ -533,13 +535,13 @@ function FloTotemBar_UpdatePosition(self)
 		else
 			if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
 				self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 464, (yOffset + yOffset1)/ACTIVE_OPTIONS.scale);
-			elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+			elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC or WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
 				local finalOffset = layout.offset * self:GetHeight();
 				self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 164, (yOffset + yOffset1)/ACTIVE_OPTIONS.scale + finalOffset);
 			end
 		end
 
-	elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and FLO_CLASS_NAME == "SHAMAN" then
+	elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC or WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC and FLO_CLASS_NAME == "SHAMAN" then
 		self:SetPoint(unpack(layout[self:GetName()]));
 	end
 end

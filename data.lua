@@ -120,4 +120,95 @@ elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
 		"2rows-reverse",
 		"4rows-reverse"
 	}
+elseif WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
+	FLO_TOTEM_SPELLS = {
+		["HUNTER"] = {
+			["TRAP"] = {
+				{ id = 13795, algo = 1 }, -- Immolation trap
+				{ id = 1499, algo = 1 }, -- Freezing trap
+				{ id = 13809, algo = 1 }, -- Frost trap
+				{ id = 13813, algo = 1 } -- Explosive trap
+			}
+		},
+		["SHAMAN"] = {
+			["EARTH"] = {
+				{ id = 8071, duration = 120 }, -- Earth skin
+				{ id = 2484, duration = 45 }, -- Earth bind
+				{ id = 5730, duration = 15 }, -- Stoneclaw
+				{ id = 8075, duration = 120 }, -- Strenght of Earth
+				{ id = 8143, duration = 120 }, -- Tremor
+				{ id = 2062, duration = 120 }, -- Earth elemental
+			},
+			["FIRE"] = {
+				{ id = 3599, duration = 30 }, -- Searing
+				{ id = 1535, duration = 5 }, -- nova
+				{ id = 8181, duration = 120 }, -- frost resistance
+				{ id = 8190, duration = 20 }, -- magma
+				{ id = 8227, duration = 120 }, -- flametongue
+				{ id = 2894, duration = 120 }, -- fire elemental
+			},
+			["WATER"] = {
+				{ id = 5394, duration = 60 }, -- healing stream
+				{ id = 8166, duration = 120 }, -- poison cleansing
+				{ id = 5675, duration = 60 }, -- manaspring
+				{ id = 8184, duration = 120 }, -- fire resistance
+				{ id = 8170, duration = 120 }, -- disease cleansing
+				{ id = 16190, duration = 12 } -- mana tide
+			},
+			["AIR"] = {
+				{ id = 8177, duration = 45 }, -- grounding
+				{ id = 10595, duration = 120 }, -- nature resistance
+				{ id = 8512, duration = 120 }, -- windfury
+				{ id = 6495, duration = 300 }, -- sentry
+				{ id = 15107, duration = 120 }, -- windwall
+				{ id = 8835, duration = 120 }, -- grace of air
+				{ id = 25908, duration = 120 }, -- tranquil air
+				{ id = 3738, duration = 120 }, -- wrath of air 
+			}
+		},
+		["PALADIN"] = {
+			["SEAL"] = {
+				{ id = 20154 }, -- righteousness
+				{ id = 21082 }, -- Crusader
+				{ id = 20164 }, -- justice
+				{ id = 20375 }, -- command
+				{ id = 20165 }, -- light
+				{ id = 20166 } -- wisdom
+			}
+		}
+	};
+	FLO_TOTEM_LAYOUTS = {
+		["1row"] = { label = FLO_TOTEM_1ROW, offset = 0,
+			["FloBarFIRE"] = { "LEFT", "FloBarEARTH", "RIGHT", 3, 0 },
+			["FloBarWATER"] = { "LEFT", "FloBarFIRE", "RIGHT", 3, 0 },
+			["FloBarAIR"] = { "LEFT", "FloBarWATER", "RIGHT", 3, 0 },
+		},
+		["2rows"] = { label = FLO_TOTEM_2ROWS, offset = 1,
+			["FloBarFIRE"] = { "LEFT", "FloBarEARTH", "RIGHT", 3, 0 },
+			["FloBarWATER"] = { "TOPLEFT", "FloBarEARTH", "BOTTOMLEFT", 0, 0 },
+			["FloBarAIR"] = { "LEFT", "FloBarWATER", "RIGHT", 3, 0 },
+		},
+		["4rows"] = { label = FLO_TOTEM_4ROWS, offset = 3,
+			["FloBarFIRE"] = { "TOPLEFT", "FloBarEARTH", "BOTTOMLEFT", 0, 0 },
+			["FloBarWATER"] = { "TOPLEFT", "FloBarFIRE", "BOTTOMLEFT", 0, 0 },
+			["FloBarAIR"] = { "TOPLEFT", "FloBarWATER", "BOTTOMLEFT", 0, 0 },
+		},
+		["2rows-reverse"] = { label = FLO_TOTEM_2ROWS_REVERSE, offset = 0,
+			["FloBarFIRE"] = { "LEFT", "FloBarEARTH", "RIGHT", 3, 0 },
+			["FloBarWATER"] = { "BOTTOMLEFT", "FloBarEARTH", "TOPLEFT", 0, 0 },
+			["FloBarAIR"] = { "LEFT", "FloBarWATER", "RIGHT", 3, 0 },
+		},
+		["4rows-reverse"] = { label = FLO_TOTEM_4ROWS_REVERSE, offset = 0,
+			["FloBarFIRE"] = { "BOTTOMLEFT", "FloBarEARTH", "TOPLEFT", 0, 0 },
+			["FloBarWATER"] = { "BOTTOMLEFT", "FloBarFIRE", "TOPLEFT", 0, 0 },
+			["FloBarAIR"] = { "BOTTOMLEFT", "FloBarWATER", "TOPLEFT", 0, 0 },
+		},
+	}
+	FLO_TOTEM_LAYOUTS_ORDER = {
+		"1row",
+		"2rows",
+		"4rows",
+		"2rows-reverse",
+		"4rows-reverse"
+	}
 end
