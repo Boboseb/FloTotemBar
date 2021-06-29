@@ -93,7 +93,9 @@ function FloTotemBar_OnLoad(self)
 		self.slot = _G[self.totemtype.."_TOTEM_SLOT"];
 	end
 	self:EnableMouse(1);
-	ExtraActionBarFrame:EnableMouse(false);
+	if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+		ExtraActionBarFrame:EnableMouse(false);
+	end
 	
 	if SHOW_WELCOME then
 		DEFAULT_CHAT_FRAME:AddMessage( "FloTotemBar "..VERSION.." loaded." );
