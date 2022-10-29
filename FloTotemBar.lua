@@ -8,7 +8,7 @@
 
 local VERSION
 if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-	VERSION = "9.2.45.5"
+	VERSION = "10.0.00.0"
 elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
 	VERSION = "1.14.45.3"
 end
@@ -132,7 +132,6 @@ function FloTotemBar_OnLoad(self)
 end
 
 function FloTotemBar_OnEvent(self, event, arg1, ...)
-
 	if event == "LEARNED_SPELL_IN_TAB" or event == "CHARACTER_POINTS_CHANGED" or event == "SPELLS_CHANGED" then
 		if not changingSpec then
 			if GetSpecialization() ~= FLOTOTEMBAR_OPTIONS.active then
@@ -450,6 +449,12 @@ function FloTotemBar_SetupSpell(self, spell, pos)
 
 		button:SetAttribute("type", "spell");
 		button:SetAttribute("spell", spell.name);
+		button:RegisterForClicks("AnyDown","AnyUp");
+
+		button:SetScript("PostClick", function(self, btn, isDown)
+			self:SetChecked(false);
+			self.PushedTexture:SetAlpha(0);
+        end)
 
 		icon:SetTexture(spellTexture);
 	end
