@@ -502,7 +502,7 @@ function FloTotemBar_UpdatePosition(self)
 
 	self:ClearAllPoints();
 	if self == FloBarEARTH or self == FloBarTRAP or self == FloBarSEAL then
-		local yOffset = 0;
+		local yOffset = 5;
 		local yOffset1 = 0;
 		local yOffset2 = 0;
 		local anchorFrame;
@@ -513,12 +513,11 @@ function FloTotemBar_UpdatePosition(self)
 		else
 			anchorFrame = MainMenuBar;
 
-			if SHOW_MULTI_ACTIONBAR_2 then
-				yOffset2 = yOffset2 + 45;
+			if MultiBar1_IsVisible() then
+				yOffset = yOffset + 50;
 			end
-
-			if SHOW_MULTI_ACTIONBAR_1 then
-				yOffset1 = yOffset1 + 45;
+			if MultiBar2_IsVisible() then
+				yOffset = yOffset + 50;
 			end
 		end
 
@@ -526,13 +525,13 @@ function FloTotemBar_UpdatePosition(self)
             if FloAspectBar ~= nil then
                 self:SetPoint("LEFT", FloAspectBar, "RIGHT", 10/ACTIVE_OPTIONS.scale, 0);
             else
-			    self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 512/ACTIVE_OPTIONS.scale, (yOffset + yOffset2)/ACTIVE_OPTIONS.scale);
+			    self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 326/ACTIVE_OPTIONS.scale, (yOffset + yOffset2)/ACTIVE_OPTIONS.scale);
             end
 		elseif FLO_CLASS_NAME == "PALADIN" then
-			self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 320/ACTIVE_OPTIONS.scale, (yOffset + yOffset1)/ACTIVE_OPTIONS.scale);
+			self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 326/ACTIVE_OPTIONS.scale, (yOffset + yOffset1)/ACTIVE_OPTIONS.scale);
 		else
 			if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-				self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 464, (yOffset + yOffset1)/ACTIVE_OPTIONS.scale);
+				self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 326, (yOffset + yOffset1)/ACTIVE_OPTIONS.scale);
 			elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
 				local finalOffset = layout.offset * self:GetHeight();
 				self:SetPoint("BOTTOMLEFT", anchorFrame, "TOPLEFT", 164, (yOffset + yOffset1)/ACTIVE_OPTIONS.scale + finalOffset);
