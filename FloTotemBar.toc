@@ -2,7 +2,7 @@
 ## Title: FloTotemBar
 ## Author: Floraline
 ## Notes: Add some bars for casting of totems/traps, with timers showing the remaining life time of the objects
-## OptionalDeps: ButtonFacade
+## OptionalDeps: ButtonFacade, ClassicUI, FloAspectBar
 ## Dependencies:
 ## SavedVariables: 
 ## SavedVariablesPerCharacter: FLOTOTEMBAR_OPTIONS

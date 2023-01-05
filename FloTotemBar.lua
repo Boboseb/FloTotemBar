@@ -17,6 +17,7 @@ end
 -- Variables
 -------------------------------------------------------------------------------
 local _
+local _classicUI
 
 local ALGO_TRAP;
 
@@ -98,7 +99,7 @@ function FloTotemBar_OnLoad(self)
 	end
 
 	if SHOW_WELCOME then
-		DEFAULT_CHAT_FRAME:AddMessage( "FloTotemBar "..VERSION.." loaded." );
+		DEFAULT_CHAT_FRAME:AddMessage( "|cffd78900FloTotemBar v"..VERSION.."|r loaded." );
 		SHOW_WELCOME = nil;
 
 		SLASH_FLOTOTEMBAR1 = "/flototembar";
@@ -110,6 +111,11 @@ function FloTotemBar_OnLoad(self)
 			self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED");
 		end
 		self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED");
+
+		_classicUI = _G["ClassicUI"]
+		if _classicUI then
+			DEFAULT_CHAT_FRAME:AddMessage( "FloTotemBar : |cffd78900ClassicUI v".._classicUI.VERSION.."|r detected." )
+		end
 	end
 	self:RegisterEvent("LEARNED_SPELL_IN_TAB");
 	self:RegisterEvent("CHARACTER_POINTS_CHANGED");
@@ -502,7 +508,7 @@ function FloTotemBar_UpdatePosition(self)
 
 	self:ClearAllPoints();
 	if self == FloBarEARTH or self == FloBarTRAP or self == FloBarSEAL then
-		local yOffset = 5;
+		local yOffset = 0;
 		local yOffset1 = 0;
 		local yOffset2 = 0;
 		local anchorFrame;
@@ -513,11 +519,21 @@ function FloTotemBar_UpdatePosition(self)
 		else
 			anchorFrame = MainMenuBar;
 
-			if MultiBar1_IsVisible() then
-				yOffset = yOffset + 50;
-			end
-			if MultiBar2_IsVisible() then
-				yOffset = yOffset + 50;
+
+			if _classicUI and _classicUI:IsEnabled() then
+				yOffset = yOffset + 6;
+				anchorFrame = CUI_MainMenuBar
+				if MultiBar1_IsVisible() then
+					yOffset = yOffset + 44;
+				end
+	
+			else
+				if MultiBar1_IsVisible() then
+					yOffset = yOffset + 50;
+				end
+				if MultiBar2_IsVisible() then
+					yOffset = yOffset + 50;
+				end
 			end
 		end
 
