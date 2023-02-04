@@ -8,7 +8,7 @@
 
 local VERSION
 if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-	VERSION = "9.2.45.5"
+	VERSION = "10.0.00.0"
 elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
 	VERSION = "1.14.45.3"
 end
@@ -88,7 +88,7 @@ function FloTotemBar_OnLoad(self)
 	self.SetupSpell = FloTotemBar_SetupSpell;
 	self.OnSetup = FloTotemBar_OnSetup;
 	self.menuHooks = { SetPosition = FloTotemBar_SetPosition, SetBorders = FloTotemBar_SetBorders };
-	if FLO_CLASS_NAME == "SHAMAN" and WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+	if FLO_CLASS_NAME == "SHAMAN" then
 		self.menuHooks.SetLayoutMenu = FloTotemBar_SetLayoutMenu;
 		self.slot = _G[self.totemtype.."_TOTEM_SLOT"];
 	end
@@ -132,7 +132,6 @@ function FloTotemBar_OnLoad(self)
 end
 
 function FloTotemBar_OnEvent(self, event, arg1, ...)
-
 	if event == "LEARNED_SPELL_IN_TAB" or event == "CHARACTER_POINTS_CHANGED" or event == "SPELLS_CHANGED" then
 		if not changingSpec then
 			if GetSpecialization() ~= FLOTOTEMBAR_OPTIONS.active then
@@ -320,7 +319,7 @@ function FloTotemBar_ReadCmd(line)
 	if cmd == "scale" and tonumber(var) then
 		FloTotemBar_SetScale(var);
 	elseif cmd == "lock" or cmd == "unlock" or cmd == "auto" then
-		for i, v in ipairs({FloBarTRAP, FloBarEARTH}) do
+		for i, v in ipairs({FloBarTRAP, FloBarEARTH, FloBarFIRE}) do
 			FloTotemBar_SetPosition(nil, v, cmd);
 		end
 	elseif cmd == "borders" then
@@ -450,6 +449,12 @@ function FloTotemBar_SetupSpell(self, spell, pos)
 
 		button:SetAttribute("type", "spell");
 		button:SetAttribute("spell", spell.name);
+		button:RegisterForClicks("AnyDown","AnyUp");
+
+		button:SetScript("PostClick", function(self, btn, isDown)
+			self:SetChecked(false);
+			self.PushedTexture:SetAlpha(0);
+        end)
 
 		icon:SetTexture(spellTexture);
 	end
@@ -496,12 +501,12 @@ function FloTotemBar_UpdatePosition(self)
 	end
 
 	local layout
-	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
-		layout = FLO_TOTEM_LAYOUTS[ACTIVE_OPTIONS.barLayout];
-	end
+	--if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+	layout = FLO_TOTEM_LAYOUTS[ACTIVE_OPTIONS.barLayout];
+	--end
 
 	self:ClearAllPoints();
-	if self == FloBarEARTH or self == FloBarTRAP or self == FloBarSEAL then
+	if self == FloBarEARTH or self == FloBarTRAP or self == FloBarSEAL or self == FloBarFIRE then
 		local yOffset = 0;
 		local yOffset1 = 0;
 		local yOffset2 = 0;
@@ -539,7 +544,7 @@ function FloTotemBar_UpdatePosition(self)
 			end
 		end
 
-	elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and FLO_CLASS_NAME == "SHAMAN" then
+	elseif FLO_CLASS_NAME == "SHAMAN" then
 		self:SetPoint(unpack(layout[self:GetName()]));
 	end
 end
@@ -658,7 +663,7 @@ function FloTotemBar_SetScale(scale)
 	local setPoints = ACTIVE_OPTIONS.scale ~= scale;
 	ACTIVE_OPTIONS.scale = scale;
 
-	for i, v in ipairs({FloBarTRAP, FloBarEARTH}) do
+	for i, v in ipairs({FloBarTRAP, FloBarEARTH, FloBarFIRE}) do
 		local p, a, rp, ox, oy = v:GetPoint();
 		local os = v:GetScale();
 		v:SetScale(scale);

@@ -32,9 +32,28 @@ if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
 				{ id = 16191, duration = 8 }, -- 38 Mana Tide Totem
 				{ id = 8512, duration = 120 }, -- 49 Windfury
 				{ id = 324386, duration = 30 }, -- Vesper Totem
+			},
+			["FIRE"] = { -- Add PVP Totems on their own row
+				{ id = 204336, duration = 30 }, -- Grounding Totem
+				{ id = 204331, duration = 45 }, -- Counterstrike Totem
+				{ id = 204330, duration = 45 } -- Skyfury Totem
 			}
 		}
 	};
+	FLO_TOTEM_LAYOUTS = {
+		["1row"] = { label = FLO_TOTEM_1ROW, offset = 0,
+			["FloBarEARTH"] = { "LEFT", "FloBarEARTH", "RIGHT", 3, 0 },
+			["FloBarWATER"] = { "LEFT", "FloBarFIRE", "RIGHT", 3, 0 }
+		},
+		["2rows"] = { label = FLO_TOTEM_2ROWS, offset = 1,
+			["FloBarEARTH"] = { "LEFT", "FloBarEARTH", "RIGHT", 3, 0 },
+			["FloBarWATER"] = { "TOPLEFT", "FloBarEARTH", "BOTTOMLEFT", 0, 0 }	
+		}
+	}
+	FLO_TOTEM_LAYOUTS_ORDER = {
+		"1row",
+		"2rows"
+	}
 elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
 	FLO_TOTEM_SPELLS = {
 		["HUNTER"] = {
