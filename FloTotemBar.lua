@@ -88,7 +88,7 @@ function FloTotemBar_OnLoad(self)
 	self.SetupSpell = FloTotemBar_SetupSpell;
 	self.OnSetup = FloTotemBar_OnSetup;
 	self.menuHooks = { SetPosition = FloTotemBar_SetPosition, SetBorders = FloTotemBar_SetBorders };
-	if FLO_CLASS_NAME == "SHAMAN" and WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+	if FLO_CLASS_NAME == "SHAMAN" then
 		self.menuHooks.SetLayoutMenu = FloTotemBar_SetLayoutMenu;
 		self.slot = _G[self.totemtype.."_TOTEM_SLOT"];
 	end
@@ -319,7 +319,7 @@ function FloTotemBar_ReadCmd(line)
 	if cmd == "scale" and tonumber(var) then
 		FloTotemBar_SetScale(var);
 	elseif cmd == "lock" or cmd == "unlock" or cmd == "auto" then
-		for i, v in ipairs({FloBarTRAP, FloBarEARTH}) do
+		for i, v in ipairs({FloBarTRAP, FloBarEARTH, FloBarFIRE}) do
 			FloTotemBar_SetPosition(nil, v, cmd);
 		end
 	elseif cmd == "borders" then
@@ -501,12 +501,12 @@ function FloTotemBar_UpdatePosition(self)
 	end
 
 	local layout
-	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
-		layout = FLO_TOTEM_LAYOUTS[ACTIVE_OPTIONS.barLayout];
-	end
+	--if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+	layout = FLO_TOTEM_LAYOUTS[ACTIVE_OPTIONS.barLayout];
+	--end
 
 	self:ClearAllPoints();
-	if self == FloBarEARTH or self == FloBarTRAP or self == FloBarSEAL then
+	if self == FloBarEARTH or self == FloBarTRAP or self == FloBarSEAL or self == FloBarFIRE then
 		local yOffset = 0;
 		local yOffset1 = 0;
 		local yOffset2 = 0;
@@ -544,7 +544,7 @@ function FloTotemBar_UpdatePosition(self)
 			end
 		end
 
-	elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and FLO_CLASS_NAME == "SHAMAN" then
+	elseif FLO_CLASS_NAME == "SHAMAN" then
 		self:SetPoint(unpack(layout[self:GetName()]));
 	end
 end
@@ -663,7 +663,7 @@ function FloTotemBar_SetScale(scale)
 	local setPoints = ACTIVE_OPTIONS.scale ~= scale;
 	ACTIVE_OPTIONS.scale = scale;
 
-	for i, v in ipairs({FloBarTRAP, FloBarEARTH}) do
+	for i, v in ipairs({FloBarTRAP, FloBarEARTH, FloBarFIRE}) do
 		local p, a, rp, ox, oy = v:GetPoint();
 		local os = v:GetScale();
 		v:SetScale(scale);
